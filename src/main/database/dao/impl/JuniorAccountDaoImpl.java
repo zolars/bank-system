@@ -22,16 +22,40 @@ public class JuniorAccountDaoImpl extends AccountDaoImpl implements JuniorAccoun
 
     // 1 for success; 0 for existed account; -1 for unavailable credit;
     // -2 for upper than 16-year-old;
-    public int addAccount(Account account) throws IOException {
-        if (account.getCustomer().getDateOfBirth().get(Calendar.YEAR) > Calendar.getInstance().get(Calendar.YEAR)
-                - 16) {
-            int result = super.addAccount(account);
-            if (result != 1)
-                return result;
-            BaseDao.addLine("accounts.txt", (BaseDao.fileCount() - 1) + "\t|\tjunior");
-            return 1;
-        } else
-            return -2;
+    public int addAccount(Customer customer) throws IOException {
+        try {
+            if (getAge(customer.getDateOfBirth()) < 16) {
+                int result = super.addAccount(customer);
+                if (result != 1)
+                    return result;
+                BaseDao.addLine("accounts.txt", (BaseDao.fileCount() - 1) + "\t|\tjunior");
+                return 1;
+            } else
+                return -2;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
+    private int getAge(Calendar dateOfBirth) throws Exception {
+        Calendar cal = Calendar.getInstance();
+
+        int yearNow = cal.get(Calendar.YEAR);
+        int monthNow = cal.get(Calendar.MONTH);
+        int dayOfMonthNow = cal.get(Calendar.DAY_OF_MONTH);
+        int yearBirth = dateOfBirth.get(Calendar.YEAR);
+        int monthBirth = dateOfBirth.get(Calendar.MONTH);
+        int dayOfMonthBirth = dateOfBirth.get(Calendar.DAY_OF_MONTH);
+        int age = yearNow - yearBirth;
+        if (monthNow <= monthBirth) {
+            if (monthNow == monthBirth) {
+                if (dayOfMonthNow < dayOfMonthBirth)
+                    age--;
+            } else {
+                age--;
+            }
+        }
+        return age;
     }
 }

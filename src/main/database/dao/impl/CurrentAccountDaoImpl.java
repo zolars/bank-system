@@ -20,8 +20,8 @@ public class CurrentAccountDaoImpl extends AccountDaoImpl implements CurrentAcco
     }
 
     // 1 for success; 0 for existed account; -1 for unavailable credit;
-    public int addAccount(Account account) throws IOException {
-        int result = super.addAccount(account);
+    public int addAccount(Customer customer) throws IOException {
+        int result = super.addAccount(customer);
         if (result != 1)
             return result;
 

@@ -11,6 +11,6 @@ public interface CurrentAccountDao extends AccountDao {
 
     public CurrentAccount findAccount(int id) throws IOException;
 
-    public int addAccount(Account account) throws IOException;
+    public int addAccount(Customer customer) throws IOException;
 
 }

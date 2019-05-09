@@ -42,7 +42,9 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     // 1 for success; 0 for existed; -1 for unavailable credit;
-    public int addAccount(Account account) throws IOException {
+    public int addAccount(Customer customer) throws IOException {
+        Account account = new Account(customer);
+
         if (!confirmCreditStatus(account.getCustomer().getName()))
             return -1;
         else {
@@ -54,13 +56,22 @@ public class AccountDaoImpl implements AccountDao {
         }
     }
 
-    public boolean deleteAccount(Account account) throws IOException {
+    // true for success; false for no account;
+    public boolean deleteAccount(int id, int pin) throws IOException {
+        Account account = findAccount(id);
+        if (account == null)
+            return false;
+
         account.setActive(false);
         return BaseDao.replace(account.toFileName(), account.toString());
     }
 
-    // true for success; false for failure;
-    public boolean addDeposit(Account account, double num, String depositType) throws IOException {
+    // true for success; false for no account;
+    public boolean addDeposit(int id, double num, String depositType) throws IOException {
+        Account account = findAccount(id);
+        if (account == null)
+            return false;
+
         if (depositType.equals("cash") || depositType.split(":")[0].equals("chequeclear")) {
             account.setBalance(account.getBalance() + num);
             BaseDao.replace(account.toFileName(), account.toString());
@@ -72,8 +83,15 @@ public class AccountDaoImpl implements AccountDao {
                         + String.format("%-4.2f", account.getBalance()) + "\t|\t" + depositType);
     }
 
-    // 1 for success; 0 for file error; -1 for overrun
-    public int addWithdral(Account account, double num) throws IOException {
+    // 1 for success; 0 for no account; -1 for overrun; -2 for wrong pin;
+    public int addWithdral(int id, int pin, double num) throws IOException {
+        Account account = findAccount(id);
+        if (account == null)
+            return 0;
+
+        if (pin != account.getPin())
+            return -2;
+
         account.setBalance(account.getBalance() - num);
 
         // Judge overrun
@@ -98,7 +116,11 @@ public class AccountDaoImpl implements AccountDao {
             return 0;
     }
 
-    public boolean clearFundsByAccount(Account account) throws IOException {
+    public boolean clearFundsByAccount(int id) throws IOException {
+        Account account = findAccount(id);
+        if (account == null)
+            return false;
+
         List<String[]> resultStr = BaseDao.search(account.toFileName(), "", 4);
 
         AccountDao dao = new AccountDaoImpl();
@@ -106,7 +128,7 @@ public class AccountDaoImpl implements AccountDao {
             if (resultStr.get(i)[5].split(":")[0].equals("chequeclear"))
                 break;
             else if (resultStr.get(i)[5].equals("cheque"))
-                if (!dao.addDeposit(account, Double.valueOf(resultStr.get(i)[3]), "chequeclear:" + resultStr.get(i)[0]))
+                if (!dao.addDeposit(id, Double.valueOf(resultStr.get(i)[3]), "chequeclear:" + resultStr.get(i)[0]))
                     return false;
         }
         return true;
@@ -116,7 +138,7 @@ public class AccountDaoImpl implements AccountDao {
         AccountDao dao = new AccountDaoImpl();
         List<String[]> resultStr = BaseDao.search("accounts.txt", "", 0);
         for (String[] strs : resultStr) {
-            if (!dao.clearFundsByAccount(findAccount(Integer.parseInt(strs[0]))))
+            if (!dao.clearFundsByAccount(Integer.parseInt(strs[0])))
                 return false;
         }
         return true;
