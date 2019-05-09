@@ -21,7 +21,7 @@ public class JuniorAccountDaoImpl extends AccountDaoImpl implements JuniorAccoun
     }
 
     // 1 for success; 0 for existed account; -1 for unavailable credit;
-    // -2 for upper than 16-year-old;
+    // -3 for upper than 16-year-old;
     public int addAccount(Customer customer) throws IOException {
         try {
             if (getAge(customer.getDateOfBirth()) < 16) {
@@ -31,7 +31,7 @@ public class JuniorAccountDaoImpl extends AccountDaoImpl implements JuniorAccoun
                 BaseDao.addLine("accounts.txt", (BaseDao.fileCount() - 1) + "\t|\tjunior");
                 return 1;
             } else
-                return -2;
+                return -3;
         } catch (Exception e) {
             e.printStackTrace();
             return 0;

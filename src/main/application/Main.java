@@ -43,15 +43,17 @@ public class Main {
 
             dao.clearFundsAll();
 
-            System.out.println(cdao.addAccount(customer));
+            System.out.println(cdao.addAccount(customer, 250));
 
-            cdao.addWithdral(2, 644487, 100);
-            cdao.addWithdral(2, 644487, 100);
-            cdao.addWithdral(2, 644487, 100);
-            cdao.addWithdral(2, 644487, 100);
-            cdao.addWithdral(2, 644487, 100);
+            cdao.addWithdral(2, 565582, 100);
+            cdao.addWithdral(2, 565582, 100);
+            cdao.addWithdral(2, 565582, 100);
+            cdao.addWithdral(2, 565582, 100);
+            cdao.addWithdral(2, 565582, 100);
 
-            System.out.println(dao.findAccount(2).getBalance());
+            cdao.adjustSuspendedAccount(2, 565582);
+
+            // System.out.println(dao.findAccount(2).getBalance());
 
         } catch (
 

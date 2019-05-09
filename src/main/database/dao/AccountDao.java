@@ -13,9 +13,11 @@ public interface AccountDao {
 
     public int addAccount(Customer customer) throws IOException;
 
-    public boolean deleteAccount(int id, int pin) throws IOException;
+    public int adjustSuspendedAccount(int id, int pin) throws IOException;
 
-    public boolean addDeposit(int id, double num, String depositType) throws IOException;
+    public int deleteAccount(int id, int pin) throws IOException;
+
+    public int addDeposit(int id, double num, String depositType) throws IOException;
 
     public int addWithdral(int id, int pin, double num) throws IOException;
 

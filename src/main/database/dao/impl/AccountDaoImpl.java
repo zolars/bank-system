@@ -56,34 +56,87 @@ public class AccountDaoImpl implements AccountDao {
         }
     }
 
-    // true for success; false for no account;
-    public boolean deleteAccount(int id, int pin) throws IOException {
+    // 1 for success; 0 for no account; -2 for wrong pin;
+    public int adjustSuspendedAccount(int id, int pin) throws IOException {
         Account account = findAccount(id);
         if (account == null)
-            return false;
+            return 0;
 
-        account.setActive(false);
-        return BaseDao.replace(account.toFileName(), account.toString());
+        if (pin != account.getPin())
+            return -2;
+
+        account.setSuspended(!account.isSuspended());
+        if (BaseDao.replace(account.toFileName(), account.toString())) {
+            if (account.isSuspended())
+                BaseDao.addLine(account.toFileName(),
+                        BaseDao.dataCount(account.toFileName(), "", 0) + "\t|\t" + "freeze  " + "\t|\t"
+                                + sf.format(Calendar.getInstance().getTime()) + "\t|\t" + String.format("%6s", "null")
+                                + "\t|\t" + String.format("%-4.2f", account.getBalance()) + "\t|\t" + null);
+            else
+                BaseDao.addLine(account.toFileName(),
+                        BaseDao.dataCount(account.toFileName(), "", 0) + "\t|\t" + "unfreeze" + "\t|\t"
+                                + sf.format(Calendar.getInstance().getTime()) + "\t|\t" + String.format("%6s", "null")
+                                + "\t|\t" + String.format("%-4.2f", account.getBalance()) + "\t|\t" + null);
+
+            return 1;
+        } else
+            return 0;
     }
 
-    // true for success; false for no account;
-    public boolean addDeposit(int id, double num, String depositType) throws IOException {
+    // 1 for success; 0 for no account; -1 for balance != 0; -2 for wrong pin;
+    public int deleteAccount(int id, int pin) throws IOException {
         Account account = findAccount(id);
         if (account == null)
-            return false;
+            return 0;
+
+        if (pin != account.getPin())
+            return -2;
+
+        if (account.getBalance() != 0) {
+            return -1;
+        }
+
+        account.setActive(false);
+        if (BaseDao.replace(account.toFileName(), account.toString())) {
+            BaseDao.addLine(account.toFileName(),
+                    BaseDao.dataCount(account.toFileName(), "", 0) + "\t|\t" + "delete  " + "\t|\t"
+                            + sf.format(Calendar.getInstance().getTime()) + "\t|\t" + String.format("%6s", "null")
+                            + "\t|\t" + String.format("%-4.2f", account.getBalance()) + "\t|\t" + null);
+            return 1;
+        } else
+            return 0;
+    }
+
+    // 1 for success; 0 for no account; -3 for suspended
+    public int addDeposit(int id, double num, String depositType) throws IOException {
+        Account account = findAccount(id);
+        if (account == null)
+            return 0;
+
+        if (account.isSuspended()) {
+            BaseDao.addLine(account.toFileName(),
+                    BaseDao.dataCount(account.toFileName(), "", 0) + "\t|\t" + "withdral" + "\t|\t"
+                            + sf.format(Calendar.getInstance().getTime()) + "\t|\t" + String.format("%-4.2f", num)
+                            + "\t|\t" + String.format("%-4.2f", account.getBalance()) + "\t|\tfrozen");
+            return -3;
+        }
 
         if (depositType.equals("cash") || depositType.split(":")[0].equals("chequeclear")) {
             account.setBalance(account.getBalance() + num);
             BaseDao.replace(account.toFileName(), account.toString());
         }
 
-        return BaseDao.addLine(account.toFileName(),
+        if (BaseDao.addLine(account.toFileName(),
                 BaseDao.dataCount(account.toFileName(), "", 0) + "\t|\t" + "deposit " + "\t|\t"
                         + sf.format(Calendar.getInstance().getTime()) + "\t|\t" + String.format("%-4.2f", num) + "\t|\t"
-                        + String.format("%-4.2f", account.getBalance()) + "\t|\t" + depositType);
+                        + String.format("%-4.2f", account.getBalance()) + "\t|\t" + depositType))
+            return 1;
+        else
+            return 0;
     }
 
     // 1 for success; 0 for no account; -1 for overrun; -2 for wrong pin;
+    // -3 for suspended
     public int addWithdral(int id, int pin, double num) throws IOException {
         Account account = findAccount(id);
         if (account == null)
@@ -91,6 +144,14 @@ public class AccountDaoImpl implements AccountDao {
 
         if (pin != account.getPin())
             return -2;
+
+        if (account.isSuspended()) {
+            BaseDao.addLine(account.toFileName(),
+                    BaseDao.dataCount(account.toFileName(), "", 0) + "\t|\t" + "withdral" + "\t|\t"
+                            + sf.format(Calendar.getInstance().getTime()) + "\t|\t" + String.format("%-4.2f", num)
+                            + "\t|\t" + String.format("%-4.2f", account.getBalance()) + "\t|\tfrozen");
+            return -3;
+        }
 
         account.setBalance(account.getBalance() - num);
 
@@ -128,7 +189,7 @@ public class AccountDaoImpl implements AccountDao {
             if (resultStr.get(i)[5].split(":")[0].equals("chequeclear"))
                 break;
             else if (resultStr.get(i)[5].equals("cheque"))
-                if (!dao.addDeposit(id, Double.valueOf(resultStr.get(i)[3]), "chequeclear:" + resultStr.get(i)[0]))
+                if (dao.addDeposit(id, Double.valueOf(resultStr.get(i)[3]), "chequeclear:" + resultStr.get(i)[0]) != 1)
                     return false;
         }
         return true;

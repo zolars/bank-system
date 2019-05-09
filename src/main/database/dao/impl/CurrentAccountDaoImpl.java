@@ -20,10 +20,14 @@ public class CurrentAccountDaoImpl extends AccountDaoImpl implements CurrentAcco
     }
 
     // 1 for success; 0 for existed account; -1 for unavailable credit;
-    public int addAccount(Customer customer) throws IOException {
+    public int addAccount(Customer customer, double overdraftLimit) throws IOException {
         int result = super.addAccount(customer);
         if (result != 1)
             return result;
+
+        Account account = findAccount(BaseDao.fileCount() - 1);
+        account.setOverdraftLimit(overdraftLimit);
+        BaseDao.replace(account.toFileName(), account.toString());
 
         BaseDao.addLine("accounts.txt", (BaseDao.fileCount() - 1) + "\t|\tcurrent");
         return 1;
