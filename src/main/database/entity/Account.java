@@ -2,6 +2,9 @@ package database.entity;
 
 import java.util.Random;
 
+import database.dao.AccountDao;
+import database.dao.impl.AccountDaoImpl;
+
 /**
  * Account
  */
@@ -9,17 +12,34 @@ public class Account {
 
     private int id;
     private int pin;
+    private Customer customer;
     private double balance;
     private double overdraftLimit;
     private boolean isSuspended;
     private boolean isActive;
     private boolean noticeNeeded;
 
+    private AccountDao dao = new AccountDaoImpl();
+
     public Account() {
+    }
+
+    public Account(Customer customer) {
         generatePin();
+        this.customer = customer;
         this.isSuspended = false;
         this.isActive = true;
         this.noticeNeeded = false;
+    }
+
+    public Account(Account account) {
+        this.id = account.id;
+        this.pin = account.pin;
+        this.balance = account.balance;
+        this.overdraftLimit = account.overdraftLimit;
+        this.isSuspended = account.isSuspended;
+        this.isActive = account.isActive;
+        this.noticeNeeded = account.noticeNeeded;
     }
 
     /**
@@ -37,7 +57,7 @@ public class Account {
     }
 
     /**
-     * @param pin the pin to set
+     * generate pin
      */
     public void generatePin() {
         Random r = new Random();
@@ -45,10 +65,31 @@ public class Account {
     }
 
     /**
+     * @param pin the pin to set
+     */
+    public void setPin(int pin) {
+        this.pin = pin;
+    }
+
+    /**
      * @return the pin
      */
     public int getPin() {
         return pin;
+    }
+
+    /**
+     * @param customer the customer to set
+     */
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    /**
+     * @return the customer
+     */
+    public Customer getCustomer() {
+        return customer;
     }
 
     /**
@@ -123,8 +164,12 @@ public class Account {
 
     @Override
     public String toString() {
-        return "" + getPin() + "|" + getBalance() + "|" + getOverdraftLimit() + "|" + isSuspended() + "|" + isActive()
-                + "|" + isNoticeNeeded();
+        return "0\t|\t" + pin + "\t|\t" + balance + "\t|\t" + overdraftLimit + "\t|\t" + isSuspended + "\t|\t"
+                + isActive + "\t|\t" + noticeNeeded;
+    }
+
+    public String toFileName() {
+        return id + ".txt";
     }
 
     public static void main(String[] args) {

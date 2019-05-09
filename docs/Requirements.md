@@ -44,14 +44,6 @@ Bear in mind that there is no absolute right answer – your solution may be per
 
 ![](https://ws1.sinaimg.cn/large/e67ea754ly1g2u15cnuedj20zd0qj78v.jpg)
 
-​           	
-
-
-
-
-
-
-
 将开发一个简单的银行系统，旨在提供一个通用的，可重复使用的系统，从中开发更真实的系统。系统的要求是提供许多不同的帐户，每个帐户都为客户提供特定的服务。以下是系统必须支持的所有类型的帐户：
 
  - Saver 帐户

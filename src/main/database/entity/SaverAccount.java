@@ -9,6 +9,14 @@ public class SaverAccount extends Account {
     private Date noticeDate;
     private double noticeAmount;
 
+    public SaverAccount(Customer customer) {
+        super(customer);
+    }
+
+    public SaverAccount(Account account) {
+        super(account);
+    }
+
     /**
      * @param noticeDate the noticeDate to set
      */

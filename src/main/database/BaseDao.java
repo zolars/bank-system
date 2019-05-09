@@ -3,6 +3,7 @@ package database;
 import application.Main;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * BaseDao
@@ -19,7 +20,7 @@ public class BaseDao {
         return file.exists();
     }
 
-    public static int fileAmount() {
+    public static int fileCount() {
         return new File(filePath).listFiles().length;
     }
 
@@ -32,10 +33,50 @@ public class BaseDao {
             writter.close();
             return true;
         } else {
-            System.out.println("Error: The file \"" + fileName
-                    + "\" is already existed.\n\tat database.BaseDao.addFile(BaseDao.java:27)");
+            System.out
+                    .println("Error: The file \"" + fileName + "\" is already existed.\n\tat database.BaseDao.addFile");
         }
         return false;
+    }
+
+    public static List<String[]> search(String fileName, String keyword, int index) throws IOException {
+        List<String[]> dataSet = new ArrayList<String[]>();
+
+        if (getConnection(fileName)) {
+            File file = new File(filePath + fileName);
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String lineString = new String();
+            while ((lineString = reader.readLine()) != null) {
+                String data[] = lineString.split("\t\\|\t");
+                if (data.length > index && (data[index].equals(keyword) || keyword.equals(""))) {
+                    dataSet.add(data);
+                }
+            }
+            reader.close();
+        } else {
+            System.out.println("Error: The file \"" + fileName + "\" doesn't exist.\n\tat database.BaseDao.search");
+        }
+        return dataSet;
+    }
+
+    public static int dataCount(String fileName, String keyword, int index) throws IOException {
+        int count = -1;
+        if (getConnection(fileName)) {
+            count++;
+            File file = new File(filePath + fileName);
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String lineString = new String();
+            while ((lineString = reader.readLine()) != null) {
+                String data[] = lineString.split("\t\\|\t");
+                if (data[index].equals(keyword) || keyword.equals("")) {
+                    count++;
+                }
+            }
+            reader.close();
+        } else {
+            System.out.println("Error: The file \"" + fileName + "\" doesn't exist.\n\tat database.BaseDao.dataCount");
+        }
+        return count;
     }
 
     public static boolean addLine(String fileName, String text) throws IOException {
@@ -58,8 +99,8 @@ public class BaseDao {
                 writter.close();
                 return true;
             } else {
-                System.out.println("Error: The file \"" + fileName
-                        + "\" doesn't exist.\n\tat database.BaseDao.addLine(BaseDao.java:40)");
+                System.out
+                        .println("Error: The file \"" + fileName + "\" doesn't exist.\n\tat database.BaseDao.addLine");
             }
         }
         return false;
@@ -92,14 +133,14 @@ public class BaseDao {
             writter.close();
             return true;
         } else {
-            System.out.println("Error: The file \"" + fileName
-                    + "\" doesn't exist.\n\tat database.BaseDao.replace(BaseDao.java:70)");
+            System.out.println("Error: The file \"" + fileName + "\" doesn't exist.\n\tat database.BaseDao.replace");
         }
         return false;
     }
 
     public static void main(String[] args) {
         try {
+            System.out.println(BaseDao.dataCount("accounts.txt", "", 0));
         } catch (Exception e) {
             e.printStackTrace();
         }
