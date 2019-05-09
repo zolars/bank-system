@@ -2,6 +2,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - FuncPanelRegister",
+            "request": "launch",
+            "mainClass": "layout.FuncPanelRegister",
+            "projectName": "bank-system_b49cac44"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - DateChooser",
+            "request": "launch",
+            "mainClass": "layout.DateChooser",
+            "projectName": "bank-system_b49cac44"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - FuncPanelLogin",
+            "request": "launch",
+            "mainClass": "layout.FuncPanelLogin",
+            "projectName": "bank-system_b49cac44"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - AccountDaoImpl",
             "request": "launch",
             "mainClass": "database.dao.impl.AccountDaoImpl",

@@ -1,11 +1,9 @@
 package application;
 
-import java.io.IOException;
-import java.util.Calendar;
+import java.util.*;
 
-import database.dao.*;
-import database.dao.impl.*;
-import database.entity.*;
+import javax.swing.*;
+import layout.*;
 
 /**
  * Main
@@ -13,57 +11,29 @@ import database.entity.*;
 public class Main {
     public static final double version = 0.1;
     public static final String filePath = "resource/";
+    public static final int freshInterval = 1000; // in ms
 
-    private static void test() {
-        JuniorAccountDao dao = new JuniorAccountDaoImpl();
-        CurrentAccountDao cdao = new CurrentAccountDaoImpl();
+    public static LinkedList<JPanel> funcSetLogin = new LinkedList<JPanel>();
+    public static LinkedList<JPanel> funcSet = new LinkedList<JPanel>();
+    public static boolean restart = false;
+    public static int loginStatus = 0;
 
-        try {
-            Calendar dateOfBirth = Calendar.getInstance();
-            dateOfBirth.set(2011, 3 - 1, 9);
-            Customer customer = new Customer("aa", "aa", dateOfBirth);
-            customer.setCreditStatus(true);
+    public static void setup() {
 
-            dao.addAccount(customer);
+        funcSetLogin = new LinkedList<JPanel>();
+        funcSet = new LinkedList<JPanel>();
 
-            dao.addDeposit(1, 10.0, "cheque");
-            dao.addDeposit(1, 20.0, "cash");
-            if (dao.addWithdral(1, 12, 9.0) == -1)
-                System.out.println("overrun");
-            if (dao.addWithdral(1, 12, 9.0) == -1)
-                System.out.println("overrun");
-            if (dao.addWithdral(1, 12, 9.0) == -1)
-                System.out.println("overrun");
-            if (dao.addWithdral(1, 12, 9.0) == -1)
-                System.out.println("overrun");
-            if (dao.addWithdral(1, 12, 9.0) == -1)
-                System.out.println("overrun");
-            if (dao.addWithdral(1, 12, 9.0) == -1)
-                System.out.println("overrun");
-
-            dao.clearFundsAll();
-
-            System.out.println(cdao.addAccount(customer, 250));
-
-            cdao.addWithdral(2, 565582, 100);
-            cdao.addWithdral(2, 565582, 100);
-            cdao.addWithdral(2, 565582, 100);
-            cdao.addWithdral(2, 565582, 100);
-            cdao.addWithdral(2, 565582, 100);
-
-            cdao.adjustSuspendedAccount(2, 565582);
-
-            // System.out.println(dao.findAccount(2).getBalance());
-
-        } catch (
-
-        IOException e) {
-            e.printStackTrace();
+        if (loginStatus == 0) {
+            funcSetLogin.add(new FuncPanelLogin());
+            funcSetLogin.add(new FuncPanelRegister());
+            new MainLayout(funcSetLogin);
+        } else {
+            funcSet.add(new FuncPanelDefault());
+            new MainLayout(funcSet);
         }
     }
 
     public static void main(String[] args) {
-        test();
-        System.out.println("done");
+        setup();
     }
 }

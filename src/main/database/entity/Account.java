@@ -19,8 +19,6 @@ public class Account {
     private boolean isActive;
     private boolean noticeNeeded;
 
-    private AccountDao dao = new AccountDaoImpl();
-
     public Account() {
     }
 
