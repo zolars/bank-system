@@ -16,30 +16,54 @@ public class Main {
 
     private static void test() {
         JuniorAccountDao dao = new JuniorAccountDaoImpl();
+        CurrentAccountDao cdao = new CurrentAccountDaoImpl();
 
         try {
-
             Calendar dateOfBirth = Calendar.getInstance();
             dateOfBirth.set(2011, 3 - 1, 9);
             Customer customer = new Customer("aa", "aa", dateOfBirth);
             customer.setCreditStatus(true);
 
-            JuniorAccount account = new JuniorAccount(customer);
+            dao.addAccount(new JuniorAccount(customer));
 
-            System.out.println(dao.addAccount(account));
-
-            JuniorAccount readAccount = dao.findAccount(2);
+            JuniorAccount readAccount = dao.findAccount(1);
+            readAccount.setOverdraftLimit(200);
 
             dao.addDeposit(readAccount, 10.0, "cheque");
             dao.addDeposit(readAccount, 20.0, "cash");
-            dao.addDeposit(readAccount, 10.0, "cheque");
-            dao.addDeposit(readAccount, 10.0, "cash");
+            if (dao.addWithdral(readAccount, 9.0) == -1)
+                System.out.println("overrun");
+            if (dao.addWithdral(readAccount, 9.0) == -1)
+                System.out.println("overrun");
+            if (dao.addWithdral(readAccount, 9.0) == -1)
+                System.out.println("overrun");
+            if (dao.addWithdral(readAccount, 9.0) == -1)
+                System.out.println("overrun");
+            if (dao.addWithdral(readAccount, 9.0) == -1)
+                System.out.println("overrun");
+            if (dao.addWithdral(readAccount, 9.0) == -1)
+                System.out.println("overrun");
 
             dao.clearFundsAll();
 
-            System.out.println(dao.findAccount(2).getBalance());
+            CurrentAccount account = new CurrentAccount(customer);
 
-            dao.deleteAccount(account);
+            account.setOverdraftLimit(200);
+
+            System.out.println(cdao.addAccount(account));
+
+            CurrentAccount currentAccount = cdao.findAccount(88);
+
+            if (currentAccount != null) {
+
+                cdao.addWithdral(currentAccount, 100);
+                cdao.addWithdral(currentAccount, 100);
+                cdao.addWithdral(currentAccount, 100);
+                cdao.addWithdral(currentAccount, 100);
+                cdao.addWithdral(currentAccount, 100);
+
+                System.out.println(dao.findAccount(2).getBalance());
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

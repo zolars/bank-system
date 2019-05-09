@@ -17,7 +17,7 @@ public interface AccountDao {
 
     public boolean addDeposit(Account account, double num, String depositType) throws IOException;
 
-    // public boolean addWithdral(Account account, double num) throws IOException;
+    public int addWithdral(Account account, double num) throws IOException;
 
     public boolean clearFundsByAccount(Account account) throws IOException;
 

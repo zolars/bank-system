@@ -23,7 +23,8 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     public Account findAccount(int id) throws IOException {
-        if (BaseDao.search(id + ".txt", "0", 0).size() == 0)
+        List<String[]> result = BaseDao.search(id + ".txt", "0", 0);
+        if (result == null)
             return null;
 
         String[] resultStr = BaseDao.search(id + ".txt", "0", 0).get(0);
@@ -66,15 +67,36 @@ public class AccountDaoImpl implements AccountDao {
         }
 
         return BaseDao.addLine(account.toFileName(),
-                BaseDao.dataCount(account.toFileName(), "", 0) + "\t|\t" + "deposit" + "\t|\t"
-                        + sf.format(Calendar.getInstance().getTime()) + "\t|\t" + num + "\t|\t" + account.getBalance()
-                        + "\t|\t" + depositType);
+                BaseDao.dataCount(account.toFileName(), "", 0) + "\t|\t" + "deposit " + "\t|\t"
+                        + sf.format(Calendar.getInstance().getTime()) + "\t|\t" + String.format("%-4.2f", num) + "\t|\t"
+                        + String.format("%-4.2f", account.getBalance()) + "\t|\t" + depositType);
     }
 
-    // public boolean addWithdral(Account account, double num) throws IOException {
-    // account.getBalance();
-    // return true;
-    // }
+    // 1 for success; 0 for file error; -1 for overrun
+    public int addWithdral(Account account, double num) throws IOException {
+        account.setBalance(account.getBalance() - num);
+
+        // Judge overrun
+        if (account.getBalance() + account.getOverdraftLimit() < 0) {
+            account.setBalance(account.getBalance() + num);
+            BaseDao.addLine(account.toFileName(),
+                    BaseDao.dataCount(account.toFileName(), "", 0) + "\t|\t" + "withdral" + "\t|\t"
+                            + sf.format(Calendar.getInstance().getTime()) + "\t|\t" + String.format("%-4.2f", num)
+                            + "\t|\t" + String.format("%-4.2f", account.getBalance()) + "\t|\toverrun");
+            return -1;
+        }
+
+        if (!BaseDao.replace(account.toFileName(), account.toString()))
+            return 0;
+
+        if (BaseDao.addLine(account.toFileName(),
+                BaseDao.dataCount(account.toFileName(), "", 0) + "\t|\t" + "withdral" + "\t|\t"
+                        + sf.format(Calendar.getInstance().getTime()) + "\t|\t" + String.format("%-4.2f", num) + "\t|\t"
+                        + String.format("%-4.2f", account.getBalance()) + "\t|\tsuccess"))
+            return 1;
+        else
+            return 0;
+    }
 
     public boolean clearFundsByAccount(Account account) throws IOException {
         List<String[]> resultStr = BaseDao.search(account.toFileName(), "", 4);

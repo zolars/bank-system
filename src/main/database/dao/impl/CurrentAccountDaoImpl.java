@@ -13,7 +13,10 @@ public class CurrentAccountDaoImpl extends AccountDaoImpl implements CurrentAcco
 
     public CurrentAccount findAccount(int id) throws IOException {
         Account account = super.findAccount(id);
-        return new CurrentAccount(account);
+        if (account != null)
+            return new CurrentAccount(account);
+        else
+            return null;
     }
 
     // 1 for success; 0 for existed account; -1 for unavailable credit;

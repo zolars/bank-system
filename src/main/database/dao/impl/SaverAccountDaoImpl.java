@@ -13,7 +13,10 @@ public class SaverAccountDaoImpl extends AccountDaoImpl implements SaverAccountD
 
     public SaverAccount findAccount(int id) throws IOException {
         Account account = super.findAccount(id);
-        return new SaverAccount(account);
+        if (account != null)
+            return new SaverAccount(account);
+        else
+            return null;
     }
 
     // 1 for success; 0 for existed account; -1 for unavailable credit;

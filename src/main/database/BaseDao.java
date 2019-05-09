@@ -55,6 +55,7 @@ public class BaseDao {
             reader.close();
         } else {
             System.out.println("Error: The file \"" + fileName + "\" doesn't exist.\n\tat database.BaseDao.search");
+            dataSet = null;
         }
         return dataSet;
     }

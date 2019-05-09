@@ -14,7 +14,10 @@ public class JuniorAccountDaoImpl extends AccountDaoImpl implements JuniorAccoun
 
     public JuniorAccount findAccount(int id) throws IOException {
         Account account = super.findAccount(id);
-        return new JuniorAccount(account);
+        if (account != null)
+            return new JuniorAccount(account);
+        else
+            return null;
     }
 
     // 1 for success; 0 for existed account; -1 for unavailable credit;
