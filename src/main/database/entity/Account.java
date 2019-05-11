@@ -2,9 +2,6 @@ package database.entity;
 
 import java.util.Random;
 
-import database.dao.AccountDao;
-import database.dao.impl.AccountDaoImpl;
-
 /**
  * Account
  */

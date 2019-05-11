@@ -11,6 +11,9 @@ public class Customer {
     private Calendar dateOfBirth;
     private boolean creditStatus;
 
+    public Customer() {
+    }
+
     public Customer(String name, String address, Calendar dateOfBirth) {
         this.name = name;
         this.address = address;

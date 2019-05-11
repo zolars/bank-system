@@ -2,6 +2,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - JuniorAccountDaoImpl",
+            "request": "launch",
+            "mainClass": "database.dao.impl.JuniorAccountDaoImpl",
+            "projectName": "bank-system_b49cac44"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - CurrentAccountDaoImpl",
+            "request": "launch",
+            "mainClass": "database.dao.impl.CurrentAccountDaoImpl",
+            "projectName": "bank-system_b49cac44"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - FuncPanelRegister",
             "request": "launch",
             "mainClass": "layout.FuncPanelRegister",

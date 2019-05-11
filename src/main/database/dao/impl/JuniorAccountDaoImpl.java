@@ -58,4 +58,24 @@ public class JuniorAccountDaoImpl extends AccountDaoImpl implements JuniorAccoun
         }
         return age;
     }
+
+    public static void main(String[] args) {
+        JuniorAccountDao dao = new JuniorAccountDaoImpl();
+
+        Customer customer = new Customer();
+        Calendar cal = Calendar.getInstance();
+        cal.set(2000, 5, 5);
+        customer.setDateOfBirth(cal);
+        try {
+            // dao.adjustSuspendedAccount(1, 455937);
+            dao.addAccount(customer);
+            // dao.clearFundsByAccount(1);
+            // dao.addWithdral(1, 45593, 20);
+            // System.out.println(dao.addWithdral(1, 45593, 20));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
 }

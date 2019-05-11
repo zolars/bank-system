@@ -66,6 +66,7 @@ public class AccountDaoImpl implements AccountDao {
             return -2;
 
         account.setSuspended(!account.isSuspended());
+
         if (BaseDao.replace(account.toFileName(), account.toString())) {
             if (account.isSuspended())
                 BaseDao.addLine(account.toFileName(),
@@ -115,7 +116,7 @@ public class AccountDaoImpl implements AccountDao {
 
         if (account.isSuspended()) {
             BaseDao.addLine(account.toFileName(),
-                    BaseDao.dataCount(account.toFileName(), "", 0) + "\t|\t" + "withdral" + "\t|\t"
+                    BaseDao.dataCount(account.toFileName(), "", 0) + "\t|\t" + "deposit " + "\t|\t"
                             + sf.format(Calendar.getInstance().getTime()) + "\t|\t" + String.format("%-4.2f", num)
                             + "\t|\t" + String.format("%-4.2f", account.getBalance()) + "\t|\tfrozen");
             return -3;
@@ -206,6 +207,17 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     public static void main(String[] args) {
+        AccountDao dao = new AccountDaoImpl();
+        try {
+            // dao.adjustSuspendedAccount(1, 455937);
+            dao.addDeposit(1, 10, "cheque");
+            dao.clearFundsByAccount(1);
+            // dao.addWithdral(1, 45593, 20);
+            // System.out.println(dao.addWithdral(1, 45593, 20));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 }

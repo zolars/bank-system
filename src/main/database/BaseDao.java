@@ -141,7 +141,7 @@ public class BaseDao {
 
     public static void main(String[] args) {
         try {
-            System.out.println(BaseDao.dataCount("accounts.txt", "", 0));
+            System.out.println(BaseDao.dataCount("1.txt", "", 5));
         } catch (Exception e) {
             e.printStackTrace();
         }

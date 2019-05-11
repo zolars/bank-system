@@ -32,4 +32,21 @@ public class CurrentAccountDaoImpl extends AccountDaoImpl implements CurrentAcco
         BaseDao.addLine("accounts.txt", (BaseDao.fileCount() - 1) + "\t|\tcurrent");
         return 1;
     }
+
+    public static void main(String[] args) {
+        CurrentAccountDao dao = new CurrentAccountDaoImpl();
+
+        Customer customer = new Customer();
+        try {
+            // dao.adjustSuspendedAccount(1, 455937);
+            dao.addAccount(customer, 700);
+            dao.clearFundsByAccount(1);
+            // dao.addWithdral(1, 45593, 20);
+            // System.out.println(dao.addWithdral(1, 45593, 20));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
 }

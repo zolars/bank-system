@@ -82,17 +82,43 @@ public class FuncPanelRegister extends FuncPanelDefault implements ActionListene
     }
 
     public void actionPerformed(ActionEvent e) {
+
         if (e.getSource() == jbRegister) {
-            if (jtDateOfBirth.getText().equals("") || jtUsername.getText().equals("")
-                    || jtAddress.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "Invalid Input! Please try again.", "Sorry",
-                        JOptionPane.WARNING_MESSAGE);
-            } else {
-                try {
-                    AccountDao dao = new AccountDaoImpl();
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(sf.parse(jtDateOfBirth.getText()));
+            try {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(sf.parse(jtDateOfBirth.getText()));
+
+                if (jtDateOfBirth.getText().equals("Click to choose birth date") || jtUsername.getText().equals("")
+                        || jtAddress.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Invalid Input! Please try again.", "Sorry",
+                            JOptionPane.WARNING_MESSAGE);
+                } else if (calendar.after(Calendar.getInstance())) {
+                    JOptionPane.showMessageDialog(null, "Wrong input at date of birth! Please try again.", "Sorry",
+                            JOptionPane.WARNING_MESSAGE);
+                } else {
                     Customer customer = new Customer(jtUsername.getText(), jtAddress.getText(), calendar);
+
+                    Object[] choices = { "Current Account", "Saver Account", "Junior Account", "Cancel" };
+                    int choiceNum = (int) JOptionPane.showOptionDialog(null,
+                            "Which is the type of account you want to register?", "Register",
+                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, choices,
+                            choices[0]);
+
+                    AccountDao dao = new AccountDaoImpl();
+
+                    switch (choiceNum) {
+                    case 0:
+                        dao = new CurrentAccountDaoImpl();
+                        break;
+                    case 1:
+                        dao = new SaverAccountDaoImpl();
+                        break;
+                    case 2:
+                        dao = new JuniorAccountDaoImpl();
+                        break;
+                    case 3:
+                        break;
+                    }
 
                     int result = dao.addAccount(customer);
                     if (result == 1) {
@@ -105,13 +131,17 @@ public class FuncPanelRegister extends FuncPanelDefault implements ActionListene
                         JOptionPane.showMessageDialog(null,
                                 "Your credit record is illegal. Please connect the administer.", "Sorry",
                                 JOptionPane.WARNING_MESSAGE);
+                    } else if (result == -3) {
+                        JOptionPane.showMessageDialog(null,
+                                "Your age is illegal for this account. Please choose the other ones.", "Sorry",
+                                JOptionPane.WARNING_MESSAGE);
                     }
-
-                } catch (Exception e1) {
-                    e1.printStackTrace();
                 }
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
 
+            jtDateOfBirth.setText("Click to choose birth date");
             jtUsername.setText("");
             jtAddress.setText("");
         }
