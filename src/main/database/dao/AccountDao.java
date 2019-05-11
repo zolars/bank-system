@@ -11,6 +11,8 @@ public interface AccountDao {
 
     public Account findAccount(int id) throws IOException;
 
+    public int findAccountType(int id) throws IOException;
+
     public int addAccount(Customer customer) throws IOException;
 
     public int adjustSuspendedAccount(int id, int pin) throws IOException;

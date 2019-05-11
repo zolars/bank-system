@@ -121,9 +121,11 @@ public class FuncPanelRegister extends FuncPanelDefault implements ActionListene
                     }
 
                     int result = dao.addAccount(customer);
-                    if (result == 1) {
-                        JOptionPane.showMessageDialog(null, "Congratulations! Register Successfully!",
-                                "Congratulations!", JOptionPane.WARNING_MESSAGE);
+                    if (result >= 1) {
+                        JOptionPane.showMessageDialog(null,
+                                "Congratulations! Register Successfully!\nYour id is : " + result + "\nYour pin is : "
+                                        + dao.findAccount(result).getPin(),
+                                "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
                     } else if (result == 0) {
                         JOptionPane.showMessageDialog(null, "The user ID or user name has been used. Please try again.",
                                 "Sorry", JOptionPane.WARNING_MESSAGE);

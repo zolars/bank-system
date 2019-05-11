@@ -38,7 +38,7 @@ public class MainLayout extends JFrame {
 
         setSize(700, 450);
         setMinimumSize(new Dimension(300, 200));
-        setTitle("Shared Bike System " + Main.version);
+        setTitle("Bank System " + Main.version);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -88,7 +88,7 @@ public class MainLayout extends JFrame {
         btn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(displayPanel, labelPageName);
-                setTitle("Shared Bike System " + Main.version + " " + labelPageName);
+                setTitle("Bank System " + Main.version + " " + labelPageName);
             }
         });
 

@@ -16,7 +16,7 @@ public class Main {
     public static LinkedList<JPanel> funcSetLogin = new LinkedList<JPanel>();
     public static LinkedList<JPanel> funcSet = new LinkedList<JPanel>();
     public static boolean restart = false;
-    public static int loginStatus = 0;
+    public static int loginStatus = 5;
 
     public static void setup() {
 
@@ -28,7 +28,7 @@ public class Main {
             funcSetLogin.add(new FuncPanelRegister());
             new MainLayout(funcSetLogin);
         } else {
-            funcSet.add(new FuncPanelDefault());
+            funcSet.add(new FuncPanelMoney());
             new MainLayout(funcSet);
         }
     }

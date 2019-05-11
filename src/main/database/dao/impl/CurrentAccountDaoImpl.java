@@ -44,7 +44,6 @@ public class CurrentAccountDaoImpl extends AccountDaoImpl implements CurrentAcco
             // dao.addWithdral(1, 45593, 20);
             // System.out.println(dao.addWithdral(1, 45593, 20));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

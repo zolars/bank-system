@@ -41,7 +41,20 @@ public class AccountDaoImpl implements AccountDao {
         return account;
     }
 
-    // 1 for success; 0 for existed; -1 for unavailable credit;
+    // 0 for no account; 1 for Current; 2 for Saver; 3 for Junior;
+    public int findAccountType(int id) throws IOException {
+        String resultStr = BaseDao.search("accounts.txt", String.valueOf(id), 0).get(0)[1];
+        if (resultStr.equals("current"))
+            return 1;
+        else if (resultStr.equals("saver"))
+            return 2;
+        else if (resultStr.equals("junior"))
+            return 3;
+        else
+            return 0;
+    }
+
+    // >=1 for success; 0 for existed; -1 for unavailable credit;
     public int addAccount(Customer customer) throws IOException {
         Account account = new Account(customer);
 
@@ -52,7 +65,7 @@ public class AccountDaoImpl implements AccountDao {
             if (!BaseDao.addFile(account.toFileName(), account.toString()))
                 return 0;
             else
-                return 1;
+                return account.getId();
         }
     }
 
@@ -215,7 +228,6 @@ public class AccountDaoImpl implements AccountDao {
             // dao.addWithdral(1, 45593, 20);
             // System.out.println(dao.addWithdral(1, 45593, 20));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

@@ -3,6 +3,7 @@ package layout;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.regex.*;
 
 import javax.swing.*;
 
@@ -84,18 +85,21 @@ public class FuncPanelLogin extends FuncPanelDefault implements ActionListener {
             AccountDao dao = new AccountDaoImpl();
             try {
                 Account account = dao.findAccount(Integer.parseInt(jtId.getText()));
-                if (account == null) {
+                if (!Pattern.compile("[0-9]+").matcher(jtId.getText()).matches() || account == null
+                        || account.isActive() == false) {
                     JOptionPane.showMessageDialog(this, "This account doesn't exist. Please try again.", "Sorry",
                             JOptionPane.WARNING_MESSAGE);
-                } else if (account.getPin() != Integer.parseInt(String.valueOf(jtPin.getPassword()))) {
+                } else if (!Pattern.compile("[0-9]+").matcher(String.valueOf(jtPin.getPassword())).matches()
+                        || account.getPin() != Integer.parseInt(String.valueOf(jtPin.getPassword()))) {
                     JOptionPane.showMessageDialog(this, "Your pin is invalid. Please try again.", "Sorry",
                             JOptionPane.WARNING_MESSAGE);
                 } else {
                     Main.loginStatus = Integer.parseInt(jtId.getText());
                     Main.restart = true;
                     JOptionPane.showMessageDialog(this, "Successfully Login!", "Congratulations",
-                            JOptionPane.WARNING_MESSAGE);
+                            JOptionPane.INFORMATION_MESSAGE);
                 }
+
                 jtId.setText("");
                 jtPin.setText("");
             } catch (IOException e1) {
