@@ -1,7 +1,6 @@
 package database.dao.impl;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -16,33 +15,27 @@ public class SaverAccountDaoImpl extends AccountDaoImpl implements SaverAccountD
 
     private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public SaverAccount findAccount(int id) throws IOException {
-        List<String[]> result = BaseDao.search(id + ".txt", "0", 0);
-        if (result == null)
-            return null;
-
-        String[] resultStr = BaseDao.search(id + ".txt", "0", 0).get(0);
-
-        SaverAccount account = new SaverAccount();
-        account.setId(id);
-        account.setPin(Integer.parseInt(resultStr[1]));
-        account.setBalance(Double.valueOf(resultStr[2]));
-        account.setOverdraftLimit(Double.valueOf(resultStr[3]));
-        account.setSuspended(Boolean.valueOf(resultStr[4]));
-        account.setActive(Boolean.valueOf(resultStr[5]));
-        account.setAvailableAmount(Double.valueOf(resultStr[6]));
-
-        return account;
+    // search for the Credit Status
+    private boolean confirmCreditStatus(String name) {
+        // some process by name
+        return true;
     }
 
     // 1 for success; 0 for existed account; -1 for unavailable credit;
     public int addAccount(Customer customer) throws IOException {
-        int result = super.addAccount(customer);
-        if (result != 1)
-            return result;
+        SaverAccount account = new SaverAccount(customer);
 
-        BaseDao.addLine("accounts.txt", (BaseDao.fileCount() - 1) + "\t|\tsaver");
-        return 1;
+        if (!confirmCreditStatus(account.getCustomer().getName()))
+            return -1;
+        else {
+            account.setId(BaseDao.fileCount());
+            if (!BaseDao.addFile(account.toFileName(), account.toString()))
+                return 0;
+            else {
+                BaseDao.addLine("accounts.txt", (BaseDao.fileCount() - 1) + "\t|\tsaver");
+                return account.getId();
+            }
+        }
     }
 
     // 1 for success; 0 for no account; -2 for wrong pin;
@@ -50,7 +43,7 @@ public class SaverAccountDaoImpl extends AccountDaoImpl implements SaverAccountD
     // -6 for ordered not due
     @Override
     public int addWithdral(int id, int pin, double num) throws IOException {
-        SaverAccount account = findAccount(id);
+        Account account = findAccount(id);
 
         if (pin < 0) {
             return addOrder(id, account.getPin(), num);
@@ -106,7 +99,7 @@ public class SaverAccountDaoImpl extends AccountDaoImpl implements SaverAccountD
     // 1 for success; 0 for no account; -1 for overrun; -2 for wrong pin;
     // -3 for suspended; -4 for already order ;
     public int addOrder(int id, int pin, double num) throws IOException {
-        SaverAccount account = findAccount(id);
+        Account account = findAccount(id);
         if (account == null)
             return 0;
 

@@ -14,6 +14,7 @@ public class Account {
     private double overdraftLimit;
     private boolean isSuspended;
     private boolean isActive;
+    private double availableAmount;
 
     public Account() {
     }
@@ -140,10 +141,24 @@ public class Account {
         return isActive;
     }
 
+    /**
+     * @param availableAmount the availableAmount to set
+     */
+    public void setAvailableAmount(double availableAmount) {
+        this.availableAmount = availableAmount;
+    }
+
+    /**
+     * @return the availableAmount
+     */
+    public double getAvailableAmount() {
+        return availableAmount;
+    }
+
     @Override
     public String toString() {
-        return "0\t|\t" + pin + "\t|\t" + balance + "\t|\t" + overdraftLimit + "\t|\t" + isSuspended + "\t|\t"
-                + isActive;
+        return "0\t|\t" + getPin() + "\t|\t" + getBalance() + "\t|\t" + getOverdraftLimit() + "\t|\t" + isSuspended()
+                + "\t|\t" + isActive() + "\t|\t" + getAvailableAmount();
     }
 
     public String toFileName() {

@@ -20,21 +20,33 @@ public class JuniorAccountDaoImpl extends AccountDaoImpl implements JuniorAccoun
             return null;
     }
 
+    // search for the Credit Status
+    private boolean confirmCreditStatus(String name) {
+        // some process by name
+        return true;
+    }
+
     // 1 for success; 0 for existed account; -1 for unavailable credit;
     // -3 for upper than 16-year-old;
     public int addAccount(Customer customer) throws IOException {
         try {
-            if (getAge(customer.getDateOfBirth()) < 16) {
-                int result = super.addAccount(customer);
-                if (result != 1)
-                    return result;
-                BaseDao.addLine("accounts.txt", (BaseDao.fileCount() - 1) + "\t|\tjunior");
-                return 1;
-            } else
+            if (getAge(customer.getDateOfBirth()) > 16)
                 return -3;
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
+        }
+        CurrentAccount account = new CurrentAccount(customer);
+        if (!confirmCreditStatus(account.getCustomer().getName()))
+            return -1;
+        else {
+            account.setId(BaseDao.fileCount());
+            if (!BaseDao.addFile(account.toFileName(), account.toString()))
+                return 0;
+            else {
+                BaseDao.addLine("accounts.txt", (BaseDao.fileCount() - 1) + "\t|\tjunior");
+                return account.getId();
+            }
         }
     }
 

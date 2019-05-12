@@ -121,6 +121,7 @@ public class FuncPanelRegister extends FuncPanelDefault implements ActionListene
                     }
 
                     int result = dao.addAccount(customer);
+
                     if (choiceNum == 3) {
 
                     } else if (result >= 1) {
