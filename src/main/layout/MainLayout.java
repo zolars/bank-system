@@ -6,6 +6,8 @@ import java.util.*;
 import javax.swing.*;
 
 import application.*;
+import database.dao.AccountDao;
+import database.dao.impl.AccountDaoImpl;
 
 /**
  * MainLayout
@@ -27,10 +29,10 @@ public class MainLayout extends JFrame {
     }
 
     private void init() {
-        setLayout(new BorderLayout());
+        setLayout(new Border   Layout());
 
-        add(displayPanel, BorderLayout.CENTER);
-        add(controlPanel, BorderLayout.SOUTH);
+        add(displayPanel, Border   Layout.CENTER);
+        add(controlPanel, Border   Layout.SOUTH);
         displayPanel.setLayout(cardLayout);
         controlPanel.setPreferredSize(new Dimension(0, 65));
         controlPanel.setLayout(new GridLayout());
@@ -69,6 +71,13 @@ public class MainLayout extends JFrame {
                 for (int i = 0; i < this.funcSet.size(); i++) {
                     this.funcSet.get(i).updateUI();
                 }
+
+                // clear the cheque
+                if (Calendar.getInstance().getTime().getTime() % 5 == 0) {
+                    AccountDao dao = new AccountDaoImpl();
+                    dao.clearFundsAll();
+                }
+
                 // Set time interval
                 Thread.sleep(Main.freshInterval);
 
@@ -77,7 +86,7 @@ public class MainLayout extends JFrame {
             }
     }
 
-    // A new function label page in order to increase new functions easily.
+    // A new function label page in order    to increase new functions easily.
     public void addFunc(MainLayout mainLayout, String labelPageName, JPanel funcPanel) {
         JPanel controlPanel = mainLayout.getControlPanel();
         JPanel displayPanel = mainLayout.getDisplayPanel();

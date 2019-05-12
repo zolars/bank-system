@@ -121,7 +121,9 @@ public class FuncPanelRegister extends FuncPanelDefault implements ActionListene
                     }
 
                     int result = dao.addAccount(customer);
-                    if (result >= 1) {
+                    if (choiceNum == 3) {
+
+                    } else if (result >= 1) {
                         JOptionPane.showMessageDialog(null,
                                 "Congratulations! Register Successfully!\nYour id is : " + result + "\nYour pin is : "
                                         + dao.findAccount(result).getPin(),

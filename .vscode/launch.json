@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - SaverAccountDaoImpl",
+            "request": "launch",
+            "mainClass": "database.dao.impl.SaverAccountDaoImpl",
+            "projectName": "bank-system_b49cac44"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - JuniorAccountDaoImpl",
             "request": "launch",
             "mainClass": "database.dao.impl.JuniorAccountDaoImpl",

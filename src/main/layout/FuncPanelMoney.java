@@ -105,6 +105,44 @@ public class FuncPanelMoney extends FuncPanelDefault implements ActionListener {
                 break;
             }
 
+            if (e.getSource() == jbDeposit) {
+                String amountStr = JOptionPane.showInputDialog(null, "Please input your amount here...", "Check pin",
+                        JOptionPane.PLAIN_MESSAGE);
+                int amount = 0;
+
+                if (!Pattern.compile("[0-9]+").matcher(amountStr).matches()) {
+                    JOptionPane.showMessageDialog(this, "Your input is invalid. Please try again.", "Sorry",
+                            JOptionPane.WARNING_MESSAGE);
+                } else {
+                    amount = Integer.parseInt(amountStr);
+                    int result;
+                    Object[] choices = { "Cash", "Cheque" };
+                    if ((int) JOptionPane.showOptionDialog(null, "Please choose your type of deposit :", "Choose Type",
+                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, choices,
+                            choices[0]) == 0) {
+                        result = dao.addDeposit(id, amount, "cash");
+                    } else {
+                        result = dao.addDeposit(id, amount, "cheque");
+                    }
+
+                    switch (result) {
+                    case 1:
+                        JOptionPane.showMessageDialog(this, "Successfully Deposit!", "Congratulations",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        break;
+                    case 0:
+                        JOptionPane.showMessageDialog(this, "This account doesn't exist. Please try again.", "Sorry",
+                                JOptionPane.WARNING_MESSAGE);
+                        break;
+                    case -3:
+                        JOptionPane.showMessageDialog(this,
+                                "Your account is suspended. Please adjust the status first.", "Sorry",
+                                JOptionPane.WARNING_MESSAGE);
+                        break;
+                    }
+                }
+            }
+
             if (e.getSource() == jbSuspend) {
                 String pinStr = JOptionPane.showInputDialog(null, "Please input your pin here...", "Check pin",
                         JOptionPane.PLAIN_MESSAGE);
@@ -112,20 +150,23 @@ public class FuncPanelMoney extends FuncPanelDefault implements ActionListener {
                 int pin = 0;
 
                 if (!Pattern.compile("[0-9]+").matcher(pinStr).matches()) {
-                    JOptionPane.showMessageDialog(this, "This account doesn't exist. Please try again.", "Sorry",
+                    JOptionPane.showMessageDialog(this, "Your pin is invalid. Please try again.", "Sorry",
                             JOptionPane.WARNING_MESSAGE);
                 } else {
                     pin = Integer.parseInt(pinStr);
-                    int result = dao.adjustSuspendedAccount(id, pin);
-                    if (result == -2) {
-                        JOptionPane.showMessageDialog(this, "Your pin is invalid. Please try again.", "Sorry",
-                                JOptionPane.WARNING_MESSAGE);
-                    } else if (result == 0) {
-                        JOptionPane.showMessageDialog(this, "This account doesn't exist. Please try again.", "Sorry",
-                                JOptionPane.WARNING_MESSAGE);
-                    } else if (result == 1) {
+                    switch (dao.adjustSuspendedAccount(id, pin)) {
+                    case 1:
                         JOptionPane.showMessageDialog(this, "Successfully Suspend!", "Congratulations",
                                 JOptionPane.INFORMATION_MESSAGE);
+                        break;
+                    case 0:
+                        JOptionPane.showMessageDialog(this, "This account doesn't exist. Please try again.", "Sorry",
+                                JOptionPane.WARNING_MESSAGE);
+                        break;
+                    case -2:
+                        JOptionPane.showMessageDialog(this, "Your pin is invalid. Please try again.", "Sorry",
+                                JOptionPane.WARNING_MESSAGE);
+                        break;
                     }
                 }
             }
@@ -137,7 +178,7 @@ public class FuncPanelMoney extends FuncPanelDefault implements ActionListener {
                 int pin = 0;
 
                 if (!Pattern.compile("[0-9]+").matcher(pinStr).matches()) {
-                    JOptionPane.showMessageDialog(this, "This account doesn't exist. Please try again.", "Sorry",
+                    JOptionPane.showMessageDialog(this, "Your pin is invalid. Please try again.", "Sorry",
                             JOptionPane.WARNING_MESSAGE);
                 } else {
                     pin = Integer.parseInt(pinStr);

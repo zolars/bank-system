@@ -1,48 +1,44 @@
 package database.entity;
 
-import java.util.Date;
-
 /**
  * SaverAccount
  */
 public class SaverAccount extends Account {
-    private Date noticeDate;
-    private double noticeAmount;
+
+    private double availableAmount;
+
+    public SaverAccount() {
+        setOverdraftLimit(0);
+    }
 
     public SaverAccount(Customer customer) {
         super(customer);
+        setOverdraftLimit(0);
     }
 
     public SaverAccount(Account account) {
         super(account);
+        setOverdraftLimit(0);
     }
 
     /**
-     * @param noticeDate the noticeDate to set
+     * @param availableAmount the availableAmount to set
      */
-    public void setNoticeDate(Date noticeDate) {
-        this.noticeDate = noticeDate;
+    public void setAvailableAmount(double availableAmount) {
+        this.availableAmount = availableAmount;
     }
 
     /**
-     * @return the noticeDate
+     * @return the availableAmount
      */
-    public Date getNoticeDate() {
-        return noticeDate;
+    public double getAvailableAmount() {
+        return availableAmount;
     }
 
-    /**
-     * @param noticeAmount the noticeAmount to set
-     */
-    public void setNoticeAmount(double noticeAmount) {
-        this.noticeAmount = noticeAmount;
-    }
-
-    /**
-     * @return the noticeAmount
-     */
-    public double getNoticeAmount() {
-        return noticeAmount;
+    @Override
+    public String toString() {
+        return "0\t|\t" + getPin() + "\t|\t" + getBalance() + "\t|\t" + getOverdraftLimit() + "\t|\t" + isSuspended()
+                + "\t|\t" + isActive() + "\t|\t" + getAvailableAmount();
     }
 
 }

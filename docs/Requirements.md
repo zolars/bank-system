@@ -11,7 +11,7 @@ A simple banking system is to be developed with the intention of providing a gen
 When a customer joins the bank, they are required choose an account type to open, and must credit it with a minimum figure. A customer may open more than one type of account.
 
 The following core functions are to be supported by the system: 
-1. Open Account: In order to open an account, the customer must provide the following information: 
+1. Open Account: In order    to open an account, the customer must provide the following information: 
 
    * name 
    * address 

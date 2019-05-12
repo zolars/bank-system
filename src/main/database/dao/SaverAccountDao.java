@@ -13,4 +13,8 @@ public interface SaverAccountDao extends AccountDao {
 
     public int addAccount(Customer customer) throws IOException;
 
+    public int addWithdral(int id, int pin) throws IOException;
+
+    public int addOrder(int id, int pin, double num) throws IOException;
+
 }

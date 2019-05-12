@@ -12,6 +12,7 @@ public class Main {
     public static final double version = 0.1;
     public static final String filePath = "resource/";
     public static final int freshInterval = 1000; // in ms
+    public static final int defaultOverdraftLimit = 2000;
 
     public static LinkedList<JPanel> funcSetLogin = new LinkedList<JPanel>();
     public static LinkedList<JPanel> funcSet = new LinkedList<JPanel>();

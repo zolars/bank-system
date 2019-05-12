@@ -36,7 +36,6 @@ public class AccountDaoImpl implements AccountDao {
         account.setOverdraftLimit(Double.valueOf(resultStr[3]));
         account.setSuspended(Boolean.valueOf(resultStr[4]));
         account.setActive(Boolean.valueOf(resultStr[5]));
-        account.setNoticeNeeded(Boolean.valueOf(resultStr[6]));
 
         return account;
     }

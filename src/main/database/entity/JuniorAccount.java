@@ -15,6 +15,7 @@ public class JuniorAccount extends Account {
 
     public JuniorAccount(Account account) {
         super(account);
+        setOverdraftLimit(0);
     }
 
     @Override
@@ -23,5 +24,4 @@ public class JuniorAccount extends Account {
                 "Error: The JuniorAccount's overdraftLimit must be zero.\n\tat database.entity.JuniorAccount.setOverdraftLimit(JuniorAccount.java:21)");
         overdraftLimit = 0;
     }
-
 }

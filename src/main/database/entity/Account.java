@@ -14,7 +14,6 @@ public class Account {
     private double overdraftLimit;
     private boolean isSuspended;
     private boolean isActive;
-    private boolean noticeNeeded;
 
     public Account() {
     }
@@ -24,7 +23,6 @@ public class Account {
         this.customer = customer;
         this.isSuspended = false;
         this.isActive = true;
-        this.noticeNeeded = false;
     }
 
     public Account(Account account) {
@@ -34,7 +32,6 @@ public class Account {
         this.overdraftLimit = account.overdraftLimit;
         this.isSuspended = account.isSuspended;
         this.isActive = account.isActive;
-        this.noticeNeeded = account.noticeNeeded;
     }
 
     /**
@@ -143,24 +140,10 @@ public class Account {
         return isActive;
     }
 
-    /**
-     * @param noticeNeeded the noticeNeeded to set
-     */
-    public void setNoticeNeeded(boolean noticeNeeded) {
-        this.noticeNeeded = noticeNeeded;
-    }
-
-    /**
-     * @return the noticeNeeded
-     */
-    public boolean isNoticeNeeded() {
-        return noticeNeeded;
-    }
-
     @Override
     public String toString() {
         return "0\t|\t" + pin + "\t|\t" + balance + "\t|\t" + overdraftLimit + "\t|\t" + isSuspended + "\t|\t"
-                + isActive + "\t|\t" + noticeNeeded;
+                + isActive;
     }
 
     public String toFileName() {
