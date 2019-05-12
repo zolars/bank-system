@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Init",
+            "request": "launch",
+            "mainClass": "application.Init",
+            "projectName": "bank-system_b49cac44"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - FuncPanelMoney",
             "request": "launch",
             "mainClass": "layout.FuncPanelMoney",
