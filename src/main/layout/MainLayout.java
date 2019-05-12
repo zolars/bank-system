@@ -29,10 +29,10 @@ public class MainLayout extends JFrame {
     }
 
     private void init() {
-        setLayout(new Border   Layout());
+        setLayout(new BorderLayout());
 
-        add(displayPanel, Border   Layout.CENTER);
-        add(controlPanel, Border   Layout.SOUTH);
+        add(displayPanel, BorderLayout.CENTER);
+        add(controlPanel, BorderLayout.SOUTH);
         displayPanel.setLayout(cardLayout);
         controlPanel.setPreferredSize(new Dimension(0, 65));
         controlPanel.setLayout(new GridLayout());
@@ -86,7 +86,7 @@ public class MainLayout extends JFrame {
             }
     }
 
-    // A new function label page in order    to increase new functions easily.
+    // A new function label page in order to increase new functions easily.
     public void addFunc(MainLayout mainLayout, String labelPageName, JPanel funcPanel) {
         JPanel controlPanel = mainLayout.getControlPanel();
         JPanel displayPanel = mainLayout.getDisplayPanel();

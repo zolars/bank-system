@@ -2,7 +2,7 @@
 package layout;
 
 import java.awt.BasicStroke;
-import java.awt.Border   Layout;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -28,7 +28,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.Border   Factory;
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -118,14 +118,14 @@ public class DateChooser extends JPanel {
     }
 
     private void initPanel() {
-        monthPanel = new JPanel(new Border   Layout());
-        monthPanel.setBorder   (Border   Factory.createLineBorder   (Color.BLUE));
-        JPanel up = new JPanel(new Border   Layout());
-        up.add(jp1 = new JP1(), Border   Layout.NORTH);
-        up.add(jp2 = new JP2(), Border   Layout.CENTER);
-        monthPanel.add(jp3 = new JP3(), Border   Layout.CENTER);
-        monthPanel.add(up, Border   Layout.NORTH);
-        monthPanel.add(jp4 = new JP4(), Border   Layout.SOUTH);
+        monthPanel = new JPanel(new BorderLayout());
+        monthPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+        JPanel up = new JPanel(new BorderLayout());
+        up.add(jp1 = new JP1(), BorderLayout.NORTH);
+        up.add(jp2 = new JP2(), BorderLayout.CENTER);
+        monthPanel.add(jp3 = new JP3(), BorderLayout.CENTER);
+        monthPanel.add(up, BorderLayout.NORTH);
+        monthPanel.add(jp4 = new JP4(), BorderLayout.SOUTH);
         this.addAncestorListener(new AncestorListener() {
             public void ancestorAdded(AncestorEvent event) {
 
@@ -151,9 +151,9 @@ public class DateChooser extends JPanel {
             }
         });
         this.setBackground(Color.WHITE);
-        this.add(showDate, Border   Layout.CENTER);
+        this.add(showDate, BorderLayout.CENTER);
         this.setPreferredSize(new Dimension(90, 25));
-        this.setBorder   (Border   Factory.createLineBorder   (Color.GRAY));
+        this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         showDate.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent me) {
                 if (showDate.isEnabled()) {
@@ -252,7 +252,7 @@ public class DateChooser extends JPanel {
         JLabel yearleft, yearright, monthleft, monthright, center, centercontainer;
 
         public JP1() {
-            super(new Border   Layout());
+            super(new BorderLayout());
             this.setBackground(new Color(160, 185, 215));
             initJP1();
         }
@@ -262,27 +262,27 @@ public class DateChooser extends JPanel {
             yearleft.setToolTipText("The past year");
             yearright = new JLabel(">>  ", JLabel.CENTER);
             yearright.setToolTipText("The next year");
-            yearleft.setBorder   (Border   Factory.createEmptyBorder   (2, 0, 0, 0));
-            yearright.setBorder   (Border   Factory.createEmptyBorder   (2, 0, 0, 0));
+            yearleft.setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
+            yearright.setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
 
             monthleft = new JLabel("  <", JLabel.RIGHT);
             monthleft.setToolTipText("The past month");
             monthright = new JLabel(">  ", JLabel.LEFT);
             monthright.setToolTipText("The next month");
-            monthleft.setBorder   (Border   Factory.createEmptyBorder   (2, 30, 0, 0));
-            monthright.setBorder   (Border   Factory.createEmptyBorder   (2, 0, 0, 30));
+            monthleft.setBorder(BorderFactory.createEmptyBorder(2, 30, 0, 0));
+            monthright.setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 30));
 
             centercontainer = new JLabel("", JLabel.CENTER);
-            centercontainer.setLayout(new Border   Layout());
+            centercontainer.setLayout(new BorderLayout());
             center = new JLabel("", JLabel.CENTER);
 
-            centercontainer.add(monthleft, Border   Layout.WEST);
-            centercontainer.add(center, Border   Layout.CENTER);
-            centercontainer.add(monthright, Border   Layout.EAST);
+            centercontainer.add(monthleft, BorderLayout.WEST);
+            centercontainer.add(center, BorderLayout.CENTER);
+            centercontainer.add(monthright, BorderLayout.EAST);
 
-            this.add(yearleft, Border   Layout.WEST);
-            this.add(centercontainer, Border   Layout.CENTER);
-            this.add(yearright, Border   Layout.EAST);
+            this.add(yearleft, BorderLayout.WEST);
+            this.add(centercontainer, BorderLayout.CENTER);
+            this.add(yearright, BorderLayout.EAST);
             this.setPreferredSize(new Dimension(295, 25));
 
             updateDate();
@@ -622,13 +622,13 @@ public class DateChooser extends JPanel {
         private static final long serialVersionUID = -6391305687575714469L;
 
         public JP4() {
-            super(new Border   Layout());
+            super(new BorderLayout());
             this.setPreferredSize(new Dimension(295, 20));
             this.setBackground(new Color(160, 185, 215));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             final JLabel jl = new JLabel("Today : " + sdf.format(new Date()));
             jl.setToolTipText("Click to choose the date of today");
-            this.add(jl, Border   Layout.CENTER);
+            this.add(jl, BorderLayout.CENTER);
             jl.addMouseListener(new MouseAdapter() {
                 public void mouseEntered(MouseEvent me) {
                     jl.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -670,8 +670,8 @@ public class DateChooser extends JPanel {
         dateChooser2.register(showDate2);
 
         JFrame jf = new JFrame("Test");
-        jf.add(showDate1, Border   Layout.NORTH);
-        jf.add(showDate2, Border   Layout.SOUTH);
+        jf.add(showDate1, BorderLayout.NORTH);
+        jf.add(showDate2, BorderLayout.SOUTH);
         jf.pack();
         jf.setLocationRelativeTo(null);
         jf.setVisible(true);
