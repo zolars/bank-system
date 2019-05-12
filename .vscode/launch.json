@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - FuncPanelMoney",
+            "request": "launch",
+            "mainClass": "layout.FuncPanelMoney",
+            "projectName": "bank-system_b49cac44"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - SaverAccountDaoImpl",
             "request": "launch",
             "mainClass": "database.dao.impl.SaverAccountDaoImpl",

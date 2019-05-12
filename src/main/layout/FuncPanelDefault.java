@@ -24,7 +24,6 @@ public class FuncPanelDefault extends JPanel {
         setPreferredSize(size);
         setMinimumSize(size);
         setMaximumSize(size);
-
     }
 
     @Override

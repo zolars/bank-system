@@ -58,7 +58,6 @@ public class MainLayout extends JFrame {
     private void sync() {
         while (true)
             try {
-
                 // Refresh all Layout
                 if (Main.restart) {
                     Thread.sleep(Main.freshInterval);

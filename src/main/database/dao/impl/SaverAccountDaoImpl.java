@@ -1,9 +1,9 @@
 package database.dao.impl;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 import database.BaseDao;
 import database.dao.*;
@@ -46,10 +46,15 @@ public class SaverAccountDaoImpl extends AccountDaoImpl implements SaverAccountD
     }
 
     // 1 for success; 0 for no account; -2 for wrong pin;
-    // -3 for suspended; -4 for no order   ;
+    // -3 for suspended; -4 for no order; -5 for ordered notice;
+    // -6 for ordered not due
     @Override
-    public int addWithdral(int id, int pin) throws IOException {
+    public int addWithdral(int id, int pin, double num) throws IOException {
         SaverAccount account = findAccount(id);
+
+        if (pin < 0) {
+            return addOrder(id, account.getPin(), num);
+        }
         if (account == null)
             return 0;
 
@@ -69,7 +74,20 @@ public class SaverAccountDaoImpl extends AccountDaoImpl implements SaverAccountD
             return -4;
         }
 
-        double num = account.getAvailableAmount();
+        try {
+            List<String[]> resultStr = BaseDao.search(account.toFileName(), "order   ", 1);
+            String[] result = resultStr.get(resultStr.size() - 1);
+            if (new Date().getTime() - sf.parse(result[2]).getTime() <= 24 * 60 * 60 * 1000)
+                return -6;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (num >= 0) {
+            return -5;
+        }
+
+        num = account.getAvailableAmount();
         account.setBalance(account.getBalance() - account.getAvailableAmount());
         account.setAvailableAmount(0);
 
@@ -86,7 +104,7 @@ public class SaverAccountDaoImpl extends AccountDaoImpl implements SaverAccountD
     }
 
     // 1 for success; 0 for no account; -1 for overrun; -2 for wrong pin;
-    // -3 for suspended; -4 for already order   ;
+    // -3 for suspended; -4 for already order ;
     public int addOrder(int id, int pin, double num) throws IOException {
         SaverAccount account = findAccount(id);
         if (account == null)
@@ -135,11 +153,9 @@ public class SaverAccountDaoImpl extends AccountDaoImpl implements SaverAccountD
     public static void main(String[] args) {
         SaverAccountDao dao = new SaverAccountDaoImpl();
         try {
-            System.out.println(dao.addWithdral(5, 390149));
+            System.out.println(dao.addWithdral(5, 390149, 123));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
-
 }
