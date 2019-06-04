@@ -6,6 +6,7 @@ import java.util.Calendar;
  * Customer
  */
 public class Customer {
+
     private String name;
     private String address;
     private Calendar dateOfBirth;

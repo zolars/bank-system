@@ -1,19 +1,20 @@
 package layout;
 
+import application.Main;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import javax.swing.*;
-
-import application.*;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 /**
  * FuncPanelDefault
- * 
+ *
  * @author Xin Yifei
  * @version 0.9
  */
 public class FuncPanelDefault extends JPanel {
+
     private static final long serialVersionUID = 1L;
 
     private Image img = new ImageIcon(getClass().getResource("/images/Plain.jpg")).getImage();

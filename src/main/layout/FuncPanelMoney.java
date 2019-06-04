@@ -1,24 +1,32 @@
 package layout;
 
-import java.awt.*;
-import java.awt.event.*;
+import application.Main;
+import database.dao.AccountDao;
+import database.dao.impl.AccountDaoImpl;
+import database.dao.impl.CurrentAccountDaoImpl;
+import database.dao.impl.JuniorAccountDaoImpl;
+import database.dao.impl.SaverAccountDaoImpl;
+import database.entity.Account;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.regex.Pattern;
-
-import javax.swing.*;
-
-import application.*;
-import database.dao.*;
-import database.dao.impl.*;
-import database.entity.*;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  * FuncPanelMoney
- * 
+ *
  * @author Xin Yifei
  * @version 0.9
  */
 public class FuncPanelMoney extends FuncPanelDefault implements ActionListener {
+
     private static final long serialVersionUID = 1L;
 
     private JLabel jlBalance;
@@ -99,182 +107,217 @@ public class FuncPanelMoney extends FuncPanelDefault implements ActionListener {
         AccountDao dao = new AccountDaoImpl();
         try {
             switch (dao.findAccountType(id)) {
-            case 1:
-                dao = new CurrentAccountDaoImpl();
-                break;
-            case 2:
-                dao = new SaverAccountDaoImpl();
-                break;
-            case 3:
-                dao = new JuniorAccountDaoImpl();
-                break;
+                case 1:
+                    dao = new CurrentAccountDaoImpl();
+                    break;
+                case 2:
+                    dao = new SaverAccountDaoImpl();
+                    break;
+                case 3:
+                    dao = new JuniorAccountDaoImpl();
+                    break;
             }
 
             if (e.getSource() == jbDeposit) {
-                String amountStr = JOptionPane.showInputDialog(null, "Please input your amount here...", "Input amount",
-                        JOptionPane.PLAIN_MESSAGE);
+                String amountStr = JOptionPane
+                        .showInputDialog(null, "Please input your amount here...", "Input amount",
+                                JOptionPane.PLAIN_MESSAGE);
                 int amount = 0;
 
                 if (!Pattern.compile("[0-9]+").matcher(amountStr).matches()) {
-                    JOptionPane.showMessageDialog(null, "Your input is invalid. Please try again.", "Sorry",
+                    JOptionPane.showMessageDialog(null, "Your input is invalid. Please try again.",
+                            "Sorry",
                             JOptionPane.WARNING_MESSAGE);
                 } else {
                     amount = Integer.parseInt(amountStr);
                     int result;
-                    Object[] choices = { "Cash", "Cheque" };
-                    if ((int) JOptionPane.showOptionDialog(null, "Please choose your type of deposit :", "Choose Type",
-                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, choices,
-                            choices[0]) == 0) {
+                    Object[] choices = {"Cash", "Cheque"};
+                    if ((int) JOptionPane
+                            .showOptionDialog(null, "Please choose your type of deposit :",
+                                    "Choose Type",
+                                    JOptionPane.YES_NO_CANCEL_OPTION,
+                                    JOptionPane.INFORMATION_MESSAGE, null, choices,
+                                    choices[0]) == 0) {
                         result = dao.addDeposit(id, amount, "cash");
                     } else {
                         result = dao.addDeposit(id, amount, "cheque");
                     }
 
                     switch (result) {
-                    case 1:
-                        JOptionPane.showMessageDialog(null, "Successfully Deposit!", "Congratulations",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        break;
-                    case 0:
-                        JOptionPane.showMessageDialog(null, "This account doesn't exist. Please try again.", "Sorry",
-                                JOptionPane.WARNING_MESSAGE);
-                        break;
-                    case -3:
-                        JOptionPane.showMessageDialog(null,
-                                "Your account is suspended. Please adjust the status first.", "Sorry",
-                                JOptionPane.WARNING_MESSAGE);
-                        break;
+                        case 1:
+                            JOptionPane.showMessageDialog(null, "Successfully Deposit!",
+                                    "Congratulations",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            break;
+                        case 0:
+                            JOptionPane.showMessageDialog(null,
+                                    "This account doesn't exist. Please try again.", "Sorry",
+                                    JOptionPane.WARNING_MESSAGE);
+                            break;
+                        case -3:
+                            JOptionPane.showMessageDialog(null,
+                                    "Your account is suspended. Please adjust the status first.",
+                                    "Sorry",
+                                    JOptionPane.WARNING_MESSAGE);
+                            break;
                     }
                 }
             }
 
             if (e.getSource() == jbWithdraw) {
 
-                String pinStr = JOptionPane.showInputDialog(null, "Please input your pin here...", "Input pin",
-                        JOptionPane.PLAIN_MESSAGE);
+                String pinStr = JOptionPane
+                        .showInputDialog(null, "Please input your pin here...", "Input pin",
+                                JOptionPane.PLAIN_MESSAGE);
 
                 int pin = 0;
 
                 if (!Pattern.compile("[0-9]+").matcher(pinStr).matches()) {
-                    JOptionPane.showMessageDialog(null, "Your input is invalid. Please try again.", "Sorry",
+                    JOptionPane.showMessageDialog(null, "Your input is invalid. Please try again.",
+                            "Sorry",
                             JOptionPane.WARNING_MESSAGE);
                 } else {
                     pin = Integer.parseInt(pinStr);
                 }
 
-                String amountStr = JOptionPane.showInputDialog(null, "Please input your amount here...", "Input amount",
-                        JOptionPane.PLAIN_MESSAGE);
+                String amountStr = JOptionPane
+                        .showInputDialog(null, "Please input your amount here...", "Input amount",
+                                JOptionPane.PLAIN_MESSAGE);
                 double amount = 0;
 
                 if (!Pattern.compile("[0-9]+").matcher(amountStr).matches()) {
-                    JOptionPane.showMessageDialog(null, "Your input is invalid. Please try again.", "Sorry",
+                    JOptionPane.showMessageDialog(null, "Your input is invalid. Please try again.",
+                            "Sorry",
                             JOptionPane.WARNING_MESSAGE);
                 } else {
                     amount = Double.parseDouble(amountStr);
                 }
 
                 switch (dao.addWithdral(id, pin, amount)) {
-                case 1:
-                    JOptionPane.showMessageDialog(null, "Successfully Withdraw!", "Congratulations",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    break;
-                case 0:
-                    JOptionPane.showMessageDialog(null, "This account doesn't exist. Please try again.", "Sorry",
-                            JOptionPane.WARNING_MESSAGE);
-                    break;
-                case -1:
-                    JOptionPane.showMessageDialog(null, "Your operation caused an overrun. Please check your balance.",
-                            "Sorry", JOptionPane.WARNING_MESSAGE);
-                    break;
-                case -2:
-                    JOptionPane.showMessageDialog(null, "Your pin is invalid. Please try again.", "Sorry",
-                            JOptionPane.WARNING_MESSAGE);
-                    break;
-                case -3:
-                    JOptionPane.showMessageDialog(null, "Your account is suspended. Please adjust the status first.",
-                            "Sorry", JOptionPane.WARNING_MESSAGE);
-                    break;
-                case -4:
-                    if (JOptionPane.showConfirmDialog(null,
-                            "You haven't done a order for withdrawal.\nWould you want to order a withdrawal for "
-                                    + amount + " dollars on tommorrow?",
-                            "Order", JOptionPane.WARNING_MESSAGE) == 0) {
-                        if (dao.addWithdral(id, -1, amount) == 1)
-                            JOptionPane.showMessageDialog(null, "Successfully Appointment!", "Congratulations",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                    }
-                    break;
-                case -5:
-                    if (JOptionPane.showConfirmDialog(null,
-                            "You have done a order for withdrawal.\nWould you want to withdraw the amount you last ordered in current?",
-                            "Ordered", JOptionPane.WARNING_MESSAGE) == 0) {
-                        if (dao.addWithdral(id, pin, -1) == 1)
-                            JOptionPane.showMessageDialog(null, "Successfully withdrawal!", "Congratulations",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                    }
-                    break;
-                case -6:
-                    JOptionPane.showMessageDialog(null,
-                            "You have done a order for withdrawal. But not yet agreed time in present.", "Sorry",
-                            JOptionPane.WARNING_MESSAGE);
-                    break;
+                    case 1:
+                        JOptionPane.showMessageDialog(null, "Successfully Withdraw!",
+                                "Congratulations",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        break;
+                    case 0:
+                        JOptionPane.showMessageDialog(null,
+                                "This account doesn't exist. Please try again.", "Sorry",
+                                JOptionPane.WARNING_MESSAGE);
+                        break;
+                    case -1:
+                        JOptionPane.showMessageDialog(null,
+                                "Your operation caused an overrun. Please check your balance.",
+                                "Sorry", JOptionPane.WARNING_MESSAGE);
+                        break;
+                    case -2:
+                        JOptionPane
+                                .showMessageDialog(null, "Your pin is invalid. Please try again.",
+                                        "Sorry",
+                                        JOptionPane.WARNING_MESSAGE);
+                        break;
+                    case -3:
+                        JOptionPane.showMessageDialog(null,
+                                "Your account is suspended. Please adjust the status first.",
+                                "Sorry", JOptionPane.WARNING_MESSAGE);
+                        break;
+                    case -4:
+                        if (JOptionPane.showConfirmDialog(null,
+                                "You haven't done a order for withdrawal.\nWould you want to order a withdrawal for "
+                                        + amount + " dollars on tommorrow?",
+                                "Order", JOptionPane.WARNING_MESSAGE) == 0) {
+                            if (dao.addWithdral(id, -1, amount) == 1) {
+                                JOptionPane.showMessageDialog(null, "Successfully Appointment!",
+                                        "Congratulations",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        }
+                        break;
+                    case -5:
+                        if (JOptionPane.showConfirmDialog(null,
+                                "You have done a order for withdrawal.\nWould you want to withdraw the amount you last ordered in current?",
+                                "Ordered", JOptionPane.WARNING_MESSAGE) == 0) {
+                            if (dao.addWithdral(id, pin, -1) == 1) {
+                                JOptionPane.showMessageDialog(null, "Successfully withdrawal!",
+                                        "Congratulations",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        }
+                        break;
+                    case -6:
+                        JOptionPane.showMessageDialog(null,
+                                "You have done a order for withdrawal. But not yet agreed time in present.",
+                                "Sorry",
+                                JOptionPane.WARNING_MESSAGE);
+                        break;
                 }
 
             }
 
             if (e.getSource() == jbSuspend) {
-                String pinStr = JOptionPane.showInputDialog(null, "Please input your pin here...", "Input pin",
-                        JOptionPane.PLAIN_MESSAGE);
+                String pinStr = JOptionPane
+                        .showInputDialog(null, "Please input your pin here...", "Input pin",
+                                JOptionPane.PLAIN_MESSAGE);
 
                 int pin = 0;
 
                 if (!Pattern.compile("[0-9]+").matcher(pinStr).matches()) {
-                    JOptionPane.showMessageDialog(null, "Your pin is invalid. Please try again.", "Sorry",
+                    JOptionPane.showMessageDialog(null, "Your pin is invalid. Please try again.",
+                            "Sorry",
                             JOptionPane.WARNING_MESSAGE);
                 } else {
                     pin = Integer.parseInt(pinStr);
                     switch (dao.adjustSuspendedAccount(id, pin)) {
-                    case 1:
-                        JOptionPane.showMessageDialog(null, "Successfully Operation!", "Congratulations",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        break;
-                    case 0:
-                        JOptionPane.showMessageDialog(null, "This account doesn't exist. Please try again.", "Sorry",
-                                JOptionPane.WARNING_MESSAGE);
-                        break;
-                    case -2:
-                        JOptionPane.showMessageDialog(null, "Your pin is invalid. Please try again.", "Sorry",
-                                JOptionPane.WARNING_MESSAGE);
-                        break;
+                        case 1:
+                            JOptionPane.showMessageDialog(null, "Successfully Operation!",
+                                    "Congratulations",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            break;
+                        case 0:
+                            JOptionPane.showMessageDialog(null,
+                                    "This account doesn't exist. Please try again.", "Sorry",
+                                    JOptionPane.WARNING_MESSAGE);
+                            break;
+                        case -2:
+                            JOptionPane.showMessageDialog(null,
+                                    "Your pin is invalid. Please try again.", "Sorry",
+                                    JOptionPane.WARNING_MESSAGE);
+                            break;
                     }
                 }
             }
 
             if (e.getSource() == jbDelete) {
-                String pinStr = JOptionPane.showInputDialog(null, "Please input your pin here...", "Input pin",
-                        JOptionPane.PLAIN_MESSAGE);
+                String pinStr = JOptionPane
+                        .showInputDialog(null, "Please input your pin here...", "Input pin",
+                                JOptionPane.PLAIN_MESSAGE);
 
                 int pin = 0;
 
                 if (!Pattern.compile("[0-9]+").matcher(pinStr).matches()) {
-                    JOptionPane.showMessageDialog(null, "Your pin is invalid. Please try again.", "Sorry",
+                    JOptionPane.showMessageDialog(null, "Your pin is invalid. Please try again.",
+                            "Sorry",
                             JOptionPane.WARNING_MESSAGE);
                 } else {
                     pin = Integer.parseInt(pinStr);
                     int result = dao.deleteAccount(id, pin);
                     if (result == -2) {
-                        JOptionPane.showMessageDialog(null, "Your pin is invalid. Please try again.", "Sorry",
-                                JOptionPane.WARNING_MESSAGE);
+                        JOptionPane
+                                .showMessageDialog(null, "Your pin is invalid. Please try again.",
+                                        "Sorry",
+                                        JOptionPane.WARNING_MESSAGE);
                     } else if (result == -1) {
-                        JOptionPane.showMessageDialog(null, "Your balance is not null. Please try again.", "Sorry",
+                        JOptionPane.showMessageDialog(null,
+                                "Your balance is not null. Please try again.", "Sorry",
                                 JOptionPane.WARNING_MESSAGE);
                     } else if (result == 0) {
-                        JOptionPane.showMessageDialog(null, "This account doesn't exist. Please try again.", "Sorry",
+                        JOptionPane.showMessageDialog(null,
+                                "This account doesn't exist. Please try again.", "Sorry",
                                 JOptionPane.WARNING_MESSAGE);
                     } else if (result == 1) {
                         Main.loginStatus = 0;
                         Main.restart = true;
-                        JOptionPane.showMessageDialog(null, "Successfully Delete! You are logging out.",
+                        JOptionPane.showMessageDialog(null,
+                                "Successfully Delete! You are logging out.",
                                 "Congratulations", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
@@ -298,10 +341,11 @@ public class FuncPanelMoney extends FuncPanelDefault implements ActionListener {
         try {
             int id = Main.loginStatus;
             Account account = dao.findAccount(id);
-            if (account.isSuspended())
+            if (account.isSuspended()) {
                 jlBalance.setText("Your account is suspended!");
-            else
+            } else {
                 jlBalance.setText("Your balance is : " + String.valueOf(account.getBalance()));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

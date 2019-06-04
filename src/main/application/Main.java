@@ -1,14 +1,17 @@
 package application;
 
-import java.util.*;
-
-import javax.swing.*;
-import layout.*;
+import java.util.LinkedList;
+import javax.swing.JPanel;
+import layout.FuncPanelLogin;
+import layout.FuncPanelMoney;
+import layout.FuncPanelRegister;
+import layout.MainLayout;
 
 /**
  * Main
  */
 public class Main {
+
     public static final double version = 0.1;
     public static final String filePath = "resource/";
     public static final int freshInterval = 1000; // in ms

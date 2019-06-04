@@ -1,6 +1,9 @@
 package application;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Init
@@ -21,7 +24,8 @@ public class Init {
                 f.createNewFile();
 
                 if (fileName.equals("accounts.txt")) {
-                    BufferedWriter writter = new BufferedWriter(new FileWriter(filePath + fileName));
+                    BufferedWriter writter = new BufferedWriter(
+                            new FileWriter(filePath + fileName));
                     String str = "";
                     writter.write(str.toString());
                     writter.close();

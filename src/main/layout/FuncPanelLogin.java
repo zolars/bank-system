@@ -1,24 +1,30 @@
 package layout;
 
-import java.awt.*;
-import java.awt.event.*;
+import application.Main;
+import database.dao.AccountDao;
+import database.dao.impl.AccountDaoImpl;
+import database.entity.Account;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.regex.*;
-
-import javax.swing.*;
-
-import application.*;
-import database.dao.*;
-import database.dao.impl.*;
-import database.entity.*;
+import java.util.regex.Pattern;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 /**
  * FuncPanelLogin
- * 
+ *
  * @author Xin Yifei
  * @version 0.9
  */
 public class FuncPanelLogin extends FuncPanelDefault implements ActionListener {
+
     private static final long serialVersionUID = 1L;
 
     private JTextField jtId;
@@ -87,11 +93,15 @@ public class FuncPanelLogin extends FuncPanelDefault implements ActionListener {
                 Account account = dao.findAccount(Integer.parseInt(jtId.getText()));
                 if (!Pattern.compile("[0-9]+").matcher(jtId.getText()).matches() || account == null
                         || account.isActive() == false) {
-                    JOptionPane.showMessageDialog(this, "This account doesn't exist. Please try again.", "Sorry",
+                    JOptionPane.showMessageDialog(this,
+                            "This account doesn't exist. Please try again.", "Sorry",
                             JOptionPane.WARNING_MESSAGE);
-                } else if (!Pattern.compile("[0-9]+").matcher(String.valueOf(jtPin.getPassword())).matches()
-                        || account.getPin() != Integer.parseInt(String.valueOf(jtPin.getPassword()))) {
-                    JOptionPane.showMessageDialog(this, "Your pin is invalid. Please try again.", "Sorry",
+                } else if (!Pattern.compile("[0-9]+").matcher(String.valueOf(jtPin.getPassword()))
+                        .matches()
+                        || account.getPin() != Integer
+                        .parseInt(String.valueOf(jtPin.getPassword()))) {
+                    JOptionPane.showMessageDialog(this, "Your pin is invalid. Please try again.",
+                            "Sorry",
                             JOptionPane.WARNING_MESSAGE);
                 } else {
                     Main.loginStatus = Integer.parseInt(jtId.getText());

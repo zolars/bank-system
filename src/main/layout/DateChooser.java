@@ -1,4 +1,3 @@
-
 package layout;
 
 import java.awt.BasicStroke;
@@ -27,7 +26,6 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -248,6 +246,7 @@ public class DateChooser extends JPanel {
     }
 
     private class JP1 extends JPanel {
+
         private static final long serialVersionUID = -5638853772805561174L;
         JLabel yearleft, yearright, monthleft, monthright, center, centercontainer;
 
@@ -374,11 +373,14 @@ public class DateChooser extends JPanel {
         }
 
         private void updateDate() {
-            center.setText("Year " + select.get(Calendar.YEAR) + " Month " + (select.get(Calendar.MONTH) + 1));
+            center.setText(
+                    "Year " + select.get(Calendar.YEAR) + " Month " + (select.get(Calendar.MONTH)
+                            + 1));
         }
     }
 
     private class JP2 extends JPanel {
+
         private static final long serialVersionUID = -8176264838786175724L;
 
         public JP2() {
@@ -387,7 +389,8 @@ public class DateChooser extends JPanel {
 
         protected void paintComponent(Graphics g) {
             g.setFont(font);
-            g.drawString("Sun.      Mon.      Tues.      Wed.     Thur.      Fri.      Sat.", 5, 10);
+            g.drawString("Sun.      Mon.      Tues.      Wed.     Thur.      Fri.      Sat.", 5,
+                    10);
             g.drawLine(0, 15, getWidth(), 15);
         }
 
@@ -397,6 +400,7 @@ public class DateChooser extends JPanel {
     }
 
     private class JP3 extends JPanel {
+
         private static final long serialVersionUID = 43157272447522985L;
 
         public JP3() {
@@ -431,7 +435,9 @@ public class DateChooser extends JPanel {
         }
     }
 
-    private class MyLabel extends JLabel implements Comparator<MyLabel>, MouseListener, MouseMotionListener {
+    private class MyLabel extends JLabel implements Comparator<MyLabel>, MouseListener,
+            MouseMotionListener {
+
         private static final long serialVersionUID = 3668734399227577214L;
         private int year, month, day;
         private boolean isSelected;
@@ -492,8 +498,9 @@ public class DateChooser extends JPanel {
                 gd.drawPolygon(p);
             }
             if (isSelected) {
-                Stroke s = new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL, 1.0f,
-                        new float[] { 2.0f, 2.0f }, 1.0f);
+                Stroke s = new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL,
+                        1.0f,
+                        new float[] {2.0f, 2.0f}, 1.0f);
                 Graphics2D gd = (Graphics2D) g;
                 gd.setStroke(s);
                 gd.setColor(Color.BLACK);
@@ -553,6 +560,7 @@ public class DateChooser extends JPanel {
     }
 
     private class LabelManager {
+
         private List<MyLabel> list;
 
         public LabelManager() {
@@ -619,6 +627,7 @@ public class DateChooser extends JPanel {
     }
 
     private class JP4 extends JPanel {
+
         private static final long serialVersionUID = -6391305687575714469L;
 
         public JP4() {

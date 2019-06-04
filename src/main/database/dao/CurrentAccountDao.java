@@ -1,8 +1,8 @@
 package database.dao;
 
+import database.entity.CurrentAccount;
+import database.entity.Customer;
 import java.io.IOException;
-
-import database.entity.*;
 
 /**
  * CurrentAccountDao

@@ -1,8 +1,8 @@
 package database.dao;
 
+import database.entity.Customer;
+import database.entity.JuniorAccount;
 import java.io.IOException;
-
-import database.entity.*;
 
 /**
  * JuniorAccountDao

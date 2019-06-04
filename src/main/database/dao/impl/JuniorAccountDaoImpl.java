@@ -1,11 +1,13 @@
 package database.dao.impl;
 
+import database.BaseDao;
+import database.dao.JuniorAccountDao;
+import database.entity.Account;
+import database.entity.CurrentAccount;
+import database.entity.Customer;
+import database.entity.JuniorAccount;
 import java.io.IOException;
 import java.util.Calendar;
-
-import database.BaseDao;
-import database.dao.*;
-import database.entity.*;
 
 /**
  * JuniorAccountDaoImpl
@@ -14,10 +16,11 @@ public class JuniorAccountDaoImpl extends AccountDaoImpl implements JuniorAccoun
 
     public JuniorAccount findAccount(int id) throws IOException {
         Account account = super.findAccount(id);
-        if (account != null)
+        if (account != null) {
             return new JuniorAccount(account);
-        else
+        } else {
             return null;
+        }
     }
 
     // search for the Credit Status
@@ -30,20 +33,22 @@ public class JuniorAccountDaoImpl extends AccountDaoImpl implements JuniorAccoun
     // -3 for upper than 16-year-old;
     public int addAccount(Customer customer) throws IOException {
         try {
-            if (getAge(customer.getDateOfBirth()) > 16)
+            if (getAge(customer.getDateOfBirth()) > 25) {
                 return -3;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
         }
         CurrentAccount account = new CurrentAccount(customer);
-        if (!confirmCreditStatus(account.getCustomer().getName()))
+        if (!confirmCreditStatus(account.getCustomer().getName())) {
             return -1;
-        else {
+        } else {
             account.setId(BaseDao.fileCount());
-            if (!BaseDao.addFile(account.toFileName(), account.toString()))
+            account.setOverdraftLimit(0);
+            if (!BaseDao.addFile(account.toFileName(), account.toString())) {
                 return 0;
-            else {
+            } else {
                 BaseDao.addLine("accounts.txt", (BaseDao.fileCount() - 1) + "\t|\tjunior");
                 return account.getId();
             }
@@ -62,8 +67,9 @@ public class JuniorAccountDaoImpl extends AccountDaoImpl implements JuniorAccoun
         int age = yearNow - yearBirth;
         if (monthNow <= monthBirth) {
             if (monthNow == monthBirth) {
-                if (dayOfMonthNow < dayOfMonthBirth)
+                if (dayOfMonthNow < dayOfMonthBirth) {
                     age--;
+                }
             } else {
                 age--;
             }

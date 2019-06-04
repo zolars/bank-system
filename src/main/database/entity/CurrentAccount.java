@@ -6,6 +6,7 @@ import application.Main;
  * CurrentAccount
  */
 public class CurrentAccount extends Account {
+
     public CurrentAccount() {
         setOverdraftLimit(Main.defaultOverdraftLimit);
     }

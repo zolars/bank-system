@@ -1,15 +1,20 @@
 package database;
 
 import application.Main;
-
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * BaseDao
- * 
- * @return true for create successfully, false for the file is already existed
- *         or IOException throws.
+ *
+ * @return true for create successfully, false for the file is already existed or IOException
+ * throws.
  */
 public class BaseDao {
 
@@ -34,12 +39,14 @@ public class BaseDao {
             return true;
         } else {
             System.out
-                    .println("Error: The file \"" + fileName + "\" is already existed.\n\tat database.BaseDao.addFile");
+                    .println("Error: The file \"" + fileName
+                            + "\" is already existed.\n\tat database.BaseDao.addFile");
         }
         return false;
     }
 
-    public static List<String[]> search(String fileName, String keyword, int index) throws IOException {
+    public static List<String[]> search(String fileName, String keyword, int index)
+            throws IOException {
         List<String[]> dataSet = new ArrayList<String[]>();
 
         if (getConnection(fileName)) {
@@ -54,7 +61,8 @@ public class BaseDao {
             }
             reader.close();
         } else {
-            System.out.println("Error: The file \"" + fileName + "\" doesn't exist.\n\tat database.BaseDao.search");
+            System.out.println("Error: The file \"" + fileName
+                    + "\" doesn't exist.\n\tat database.BaseDao.search");
             dataSet = null;
         }
         return dataSet;
@@ -75,7 +83,8 @@ public class BaseDao {
             }
             reader.close();
         } else {
-            System.out.println("Error: The file \"" + fileName + "\" doesn't exist.\n\tat database.BaseDao.dataCount");
+            System.out.println("Error: The file \"" + fileName
+                    + "\" doesn't exist.\n\tat database.BaseDao.dataCount");
         }
         return count;
     }
@@ -101,7 +110,8 @@ public class BaseDao {
                 return true;
             } else {
                 System.out
-                        .println("Error: The file \"" + fileName + "\" doesn't exist.\n\tat database.BaseDao.addLine");
+                        .println("Error: The file \"" + fileName
+                                + "\" doesn't exist.\n\tat database.BaseDao.addLine");
             }
         }
         return false;
@@ -134,7 +144,8 @@ public class BaseDao {
             writter.close();
             return true;
         } else {
-            System.out.println("Error: The file \"" + fileName + "\" doesn't exist.\n\tat database.BaseDao.replace");
+            System.out.println("Error: The file \"" + fileName
+                    + "\" doesn't exist.\n\tat database.BaseDao.replace");
         }
         return false;
     }

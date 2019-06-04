@@ -1,10 +1,11 @@
 package database.dao.impl;
 
-import java.io.IOException;
-
 import database.BaseDao;
-import database.dao.*;
-import database.entity.*;
+import database.dao.CurrentAccountDao;
+import database.entity.Account;
+import database.entity.CurrentAccount;
+import database.entity.Customer;
+import java.io.IOException;
 
 /**
  * CurrentAccountDaoImpl
@@ -13,10 +14,11 @@ public class CurrentAccountDaoImpl extends AccountDaoImpl implements CurrentAcco
 
     public CurrentAccount findAccount(int id) throws IOException {
         Account account = super.findAccount(id);
-        if (account != null)
+        if (account != null) {
             return new CurrentAccount(account);
-        else
+        } else {
             return null;
+        }
     }
 
     // search for the Credit Status
@@ -29,13 +31,13 @@ public class CurrentAccountDaoImpl extends AccountDaoImpl implements CurrentAcco
     public int addAccount(Customer customer) throws IOException {
         CurrentAccount account = new CurrentAccount(customer);
 
-        if (!confirmCreditStatus(account.getCustomer().getName()))
+        if (!confirmCreditStatus(account.getCustomer().getName())) {
             return -1;
-        else {
+        } else {
             account.setId(BaseDao.fileCount());
-            if (!BaseDao.addFile(account.toFileName(), account.toString()))
+            if (!BaseDao.addFile(account.toFileName(), account.toString())) {
                 return 0;
-            else {
+            } else {
                 BaseDao.addLine("accounts.txt", (BaseDao.fileCount() - 1) + "\t|\tcurrent");
                 return account.getId();
             }

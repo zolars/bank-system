@@ -157,7 +157,8 @@ public class Account {
 
     @Override
     public String toString() {
-        return "0\t|\t" + getPin() + "\t|\t" + getBalance() + "\t|\t" + getOverdraftLimit() + "\t|\t" + isSuspended()
+        return "0\t|\t" + getPin() + "\t|\t" + getBalance() + "\t|\t" + getOverdraftLimit()
+                + "\t|\t" + isSuspended()
                 + "\t|\t" + isActive() + "\t|\t" + getAvailableAmount();
     }
 

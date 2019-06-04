@@ -1,17 +1,24 @@
 package layout;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
-
-import application.*;
+import application.Main;
 import database.dao.AccountDao;
 import database.dao.impl.AccountDaoImpl;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Calendar;
+import java.util.LinkedList;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * MainLayout
- * 
+ *
  * @author Xin Yifei
  * @version 0.9
  */
@@ -56,7 +63,7 @@ public class MainLayout extends JFrame {
      * Refresh and Sync job
      */
     private void sync() {
-        while (true)
+        while (true) {
             try {
                 // Refresh all Layout
                 if (Main.restart) {
@@ -83,6 +90,7 @@ public class MainLayout extends JFrame {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
     }
 
     // A new function label page in order to increase new functions easily.

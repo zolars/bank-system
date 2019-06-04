@@ -1,24 +1,32 @@
 package layout;
 
-import java.awt.*;
-import java.awt.event.*;
+import application.Main;
+import database.dao.AccountDao;
+import database.dao.impl.AccountDaoImpl;
+import database.dao.impl.CurrentAccountDaoImpl;
+import database.dao.impl.JuniorAccountDaoImpl;
+import database.dao.impl.SaverAccountDaoImpl;
+import database.entity.Customer;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
-import javax.swing.*;
-
-import application.*;
-import database.dao.*;
-import database.dao.impl.*;
-import database.entity.*;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  * FuncPanelRegister
- * 
+ *
  * @author Xin Yifei
  * @version 0.9
  */
 public class FuncPanelRegister extends FuncPanelDefault implements ActionListener {
+
     private static final long serialVersionUID = 1L;
     private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
     private DateChooser dateChooser = DateChooser.getInstance("yyyy-MM-dd");
@@ -88,36 +96,41 @@ public class FuncPanelRegister extends FuncPanelDefault implements ActionListene
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(sf.parse(jtDateOfBirth.getText()));
 
-                if (jtDateOfBirth.getText().equals("Click to choose birth date") || jtUsername.getText().equals("")
+                if (jtDateOfBirth.getText().equals("Click to choose birth date") || jtUsername
+                        .getText().equals("")
                         || jtAddress.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "Invalid Input! Please try again.", "Sorry",
                             JOptionPane.WARNING_MESSAGE);
                 } else if (calendar.after(Calendar.getInstance())) {
-                    JOptionPane.showMessageDialog(null, "Wrong input at date of birth! Please try again.", "Sorry",
+                    JOptionPane.showMessageDialog(null,
+                            "Wrong input at date of birth! Please try again.", "Sorry",
                             JOptionPane.WARNING_MESSAGE);
                 } else {
-                    Customer customer = new Customer(jtUsername.getText(), jtAddress.getText(), calendar);
+                    Customer customer = new Customer(jtUsername.getText(), jtAddress.getText(),
+                            calendar);
 
-                    Object[] choices = { "Current Account", "Saver Account", "Junior Account", "Cancel" };
+                    Object[] choices = {"Current Account", "Saver Account", "Junior Account",
+                            "Cancel"};
                     int choiceNum = (int) JOptionPane.showOptionDialog(null,
                             "Which is the type of account you want to register?", "Register",
-                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, choices,
+                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+                            choices,
                             choices[0]);
 
                     AccountDao dao = new AccountDaoImpl();
 
                     switch (choiceNum) {
-                    case 0:
-                        dao = new CurrentAccountDaoImpl();
-                        break;
-                    case 1:
-                        dao = new SaverAccountDaoImpl();
-                        break;
-                    case 2:
-                        dao = new JuniorAccountDaoImpl();
-                        break;
-                    case 3:
-                        break;
+                        case 0:
+                            dao = new CurrentAccountDaoImpl();
+                            break;
+                        case 1:
+                            dao = new SaverAccountDaoImpl();
+                            break;
+                        case 2:
+                            dao = new JuniorAccountDaoImpl();
+                            break;
+                        case 3:
+                            break;
                     }
 
                     int result = dao.addAccount(customer);
@@ -126,19 +139,23 @@ public class FuncPanelRegister extends FuncPanelDefault implements ActionListene
 
                     } else if (result >= 1) {
                         JOptionPane.showMessageDialog(null,
-                                "Congratulations! Register Successfully!\nYour id is : " + result + "\nYour pin is : "
+                                "Congratulations! Register Successfully!\nYour id is : " + result
+                                        + "\nYour pin is : "
                                         + dao.findAccount(result).getPin(),
                                 "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
                     } else if (result == 0) {
-                        JOptionPane.showMessageDialog(null, "The user ID or user name has been used. Please try again.",
+                        JOptionPane.showMessageDialog(null,
+                                "The user ID or user name has been used. Please try again.",
                                 "Sorry", JOptionPane.WARNING_MESSAGE);
                     } else if (result == -1) {
                         JOptionPane.showMessageDialog(null,
-                                "Your credit record is illegal. Please connect the administer.", "Sorry",
+                                "Your credit record is illegal. Please connect the administer.",
+                                "Sorry",
                                 JOptionPane.WARNING_MESSAGE);
                     } else if (result == -3) {
                         JOptionPane.showMessageDialog(null,
-                                "Your age is illegal for this account. Please choose the other ones.", "Sorry",
+                                "Your age is illegal for this account. Please choose the other ones.",
+                                "Sorry",
                                 JOptionPane.WARNING_MESSAGE);
                     }
                 }
