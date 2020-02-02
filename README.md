@@ -78,8 +78,8 @@ We can also use the command-line interface to install this program everywhere yo
 
 Thank you for using this application. If you have any problems, don't hesitate and contact me with following e-mail:
 
-- Github: https://github.com/zolars/BikeShareSystem
-- E-mail: xinyf_bupt@outlook.com
+- Github: github.com/zolars
+- E-mail: yif_xin@gmail.com
 
 Besides, I hope you can give valuable advice to me. It's really helpful for me to improve this application.
 
